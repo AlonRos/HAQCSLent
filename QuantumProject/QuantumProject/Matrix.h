@@ -38,9 +38,15 @@ public:
 
 	complex_t& entry(int rowIndex, int colIndex);
 
-	Matrix row(int rowIndex);
+	Matrix& row(int rowIndex);
 
-	Matrix col(int colIndex);
+	Matrix& col(int colIndex);
+
+	void print();
+
+	static Matrix& randomMatrix(int m, int n);
+
+	static Matrix& randomMatrix(int m, int n, int bound);
 
 };
 

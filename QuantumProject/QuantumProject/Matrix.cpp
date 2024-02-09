@@ -54,29 +54,35 @@ complex_t& Matrix::entry(int rowIndex, int colIndex) {
 	}
 }
 
-Matrix Matrix::row(int rowIndex) {
+Matrix& Matrix::row(int rowIndex) {
+	Matrix* returnRow;
 	if (jumpArrayIsRow) {
 		JumpArray<complex_t> rowElements[] = { elements[rowIndex] };
-		return Matrix(1, n, true, rowElements);
+
+		returnRow = new Matrix(1, n, true, rowElements);
 	}
 	else {
 		JumpArray<complex_t> rowJA = JumpArray<complex_t>(&entry(rowIndex, 0), sizeof(complex_t), n);
 		JumpArray<complex_t> rowElements[] = { rowJA };
-		return Matrix(1, n, true, rowElements);
+		returnRow = new Matrix(1, n, true, rowElements);
 	}
 
+	return *returnRow;
 }
 
-Matrix Matrix::col(int colIndex) {
+Matrix& Matrix::col(int colIndex) {
+	Matrix* returnCol;
 	if (jumpArrayIsRow) {
 		JumpArray<complex_t> colJA = JumpArray<complex_t>(&entry(0, colIndex), sizeof(complex_t), m);
 		JumpArray<complex_t> colElements[] = { colJA };
-		return Matrix(m, 1, false, colElements);
+		returnCol = new Matrix(m, 1, false, colElements);
 	}
 	else {
 		JumpArray<complex_t> colElements[] = { elements[colIndex] };
-		return Matrix(m, 1, false, colElements);
+		returnCol = new Matrix(m, 1, false, colElements);
 	}
+
+	return *returnCol;
 
 }
 
@@ -113,7 +119,6 @@ Matrix& Matrix::operator*(Matrix& other) {
 Matrix& Matrix::operator*(complex_t scalar) {
 	Matrix* returnMatrix = new Matrix(m, n);
 
-
 	complex_t* returnMatrixFirstElement = &returnMatrix->entry(0, 0);
 	complex_t* firstElement = &entry(0, 0);
 
@@ -144,4 +149,36 @@ Matrix& Matrix::fromArray(int m, int n, bool JAisRow, complex_t* arr) {
 
 Matrix& Matrix::fromArray(int m, int n, complex_t* arr) {
 	return fromArray(m, n, n >= m, arr);
+}
+
+void Matrix::print() {
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			cout << entry(i, j) << " ";
+		}
+		cout << '\n';
+	}
+}
+
+Matrix& Matrix::randomMatrix(int m, int n) {
+	Matrix* returnMatrix = new Matrix(m, n);
+
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			returnMatrix->entry(i, j) = rand();
+		}
+	}
+	return *returnMatrix;
+}
+
+Matrix& Matrix::randomMatrix(int m, int n, int bound) {
+	Matrix* returnMatrix = new Matrix(m, n);
+
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			returnMatrix->entry(i, j) = rand() % bound;
+		}
+	}
+	return *returnMatrix;
+
 }
