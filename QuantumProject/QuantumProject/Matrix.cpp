@@ -109,3 +109,39 @@ Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
 Matrix& Matrix::operator*(Matrix& other) {
 	return Matrix::mult(*this, other);
 }
+
+Matrix& Matrix::operator*(complex_t scalar) {
+	Matrix* returnMatrix = new Matrix(m, n);
+
+
+	complex_t* returnMatrixFirstElement = &returnMatrix->entry(0, 0);
+	complex_t* firstElement = &entry(0, 0);
+
+	for (int i = 0; i < m * n; ++i) {
+		returnMatrixFirstElement[i] = firstElement[i] * scalar;
+	}
+
+	return *returnMatrix;
+}
+
+Matrix& Matrix::fromArray(int m, int n, bool JAisRow, complex_t* arr) {
+	Matrix* returnMatrix = new Matrix(m, n, JAisRow);
+
+	if (JAisRow) {
+		complex_t* firstElement = &returnMatrix->entry(0, 0);
+		for (int i = 0; i < m; ++i) {
+			for (int j = 0; j < n; ++j) {
+				firstElement[i + m * j] = arr[j + n * i];
+			}
+		}
+	}
+	else {
+		copy(arr, arr + m * n, &returnMatrix->entry(0, 0));
+	}
+
+	return *returnMatrix;
+}
+
+Matrix& Matrix::fromArray(int m, int n, complex_t* arr) {
+	return fromArray(m, n, n >= m, arr);
+}

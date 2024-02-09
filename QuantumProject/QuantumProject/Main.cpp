@@ -1,42 +1,31 @@
 #include <iostream>
 #include "Matrix.h"
+#include "Gates.h"
 
 using namespace std;
 
 int main() {
-	Matrix m(4, 4, true);
+	initializeGates();
 
-	Matrix::mult(m, m);
+	Matrix& bitFlip = *bitFlipPtr;
+	Matrix& hadamard = *hadamardPtr;
+	Matrix& CNOT = *CNOTPtr;
 
-	Matrix secondRow = m.row(2);
 
-	for (int i = 0; i < 4; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			m.entry(i, j) = 4 * i + j;
+	for (int i = 0; i < 2; ++i) {
+		for (int j = 0; j < 2; ++j) {
+			cout << hadamard.entry(i, j) << " ";
 		}
+		cout << '\n';
+	}
+	cout << '\n';
+
+	Matrix zero = Matrix::fromArray(2, 1, new complex_t[]{ {1}, {0} });
+
+	Matrix superposition = hadamard * zero;
+
+	for (int i = 0; i < 2; ++i) {
+		cout << superposition.entry(i, 0) << " ";
 	}
 
-	for (int i = 0; i < 4; ++i) {
-		cout << secondRow.entry(0, i) << " ";
-	}
-	cout << "\n\n";
-	
-
-	for (int i = 0; i < 4; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			cout << m.entry(i, j) << " ";
-		}
-		cout << "\n";
-	}
-	cout << "\n";
-
-
-	Matrix x = secondRow * m;
-
-	for (int i = 0; i < 1; ++i) {
-		for (int j = 0; j < 4; ++j) {
-			cout << x.entry(i, j) << " ";
-		}
-		cout << "\n";
-	}
 }

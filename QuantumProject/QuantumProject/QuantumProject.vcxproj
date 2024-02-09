@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Gates.h" />
     <ClInclude Include="GPU.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
@@ -138,6 +139,7 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Gates.cpp" />
     <ClCompile Include="GPU.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
