@@ -25,6 +25,8 @@ Matrix::Matrix(int m, int n, bool JAisRow) : m(m), n(n), jumpArrayIsRow(JAisRow)
 
 }
 
+Matrix::Matrix(int m, int n) :Matrix(m, n, n >= m) {}
+
 
 // Constructor which gets an array of JA and copys them. The elements themselves does'nt get copied
 Matrix::Matrix(int m, int n, bool JAisRow, JumpArray<complex_t> elements[]) : m(m), n(n), jumpArrayIsRow(JAisRow) {
@@ -78,13 +80,32 @@ Matrix Matrix::col(int colIndex) {
 
 }
 
-Matrix Matrix::cpuMult(Matrix& A, Matrix& B) {
-	if (A.m != B.m or A.n != B.n) {
+
+Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
+	if (A.n != B.m) {
 		throw Exception(runtime_error, "Cannot multiply a {} x {} matrix with a {} x {} matrix", A.m, A.n, B.m, B.n);
-		return Matrix(0,0, true);
 	}
-	
 
+	Matrix* returnMatrix = new Matrix(A.m, B.n);
+	complex_t res = 0;
 
+	for (int i = 0; i < A.m; ++i) {
+		for (int j = 0; j < B.n; ++j) {
 
+			for (int k = 0; k < A.n; ++k) {
+				res += A.entry(i, k) * B.entry(k, j);
+			}
+
+			returnMatrix->entry(i, j) = res;
+
+			res = 0;
+		}
+	}
+
+	return *returnMatrix;
+
+}
+
+Matrix& Matrix::operator*(Matrix& other) {
+	return Matrix::mult(*this, other);
 }
