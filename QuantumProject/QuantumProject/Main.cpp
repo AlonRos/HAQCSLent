@@ -7,12 +7,7 @@
 using namespace std;
 
 int main() {
-	initializeGates();
-
-	Matrix& bitFlip = *bitFlipPtr;
-	Matrix& hadamard = *hadamardPtr;
-	Matrix& CNOT = *CNOTPtr;
-
+	
 	srand(time(NULL));
 
 	int c = 20;
@@ -26,7 +21,7 @@ int main() {
 		Matrix& m2 = Matrix::randomMatrix(100, 100, 25);
 		//m2.print();
 		//cout << "\n";
-// 
+ 
 		//cout << "\n";
 
 		auto start = chrono::high_resolution_clock::now();

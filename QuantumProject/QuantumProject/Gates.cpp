@@ -1,33 +1,21 @@
 #include "Gates.h"
 
-Matrix* bitFlipPtr;
+static complex_t bitFlipArr[2][2] = {
+	{ 0, 1 },
+	{ 1, 0 }
+};
+Matrix& bitFlip = Matrix::fromArray(2, 2, (complex_t*)bitFlipArr);
 
-Matrix* hadamardPtr;
+static complex_t hadamardArr[2][2] = {
+	{ 1 / sqrt(2), 1 / sqrt(2) },
+	{ 1 / sqrt(2), -1 / sqrt(2) }
+};
+Matrix& hadamard = Matrix::fromArray(2, 2, (complex_t*)hadamardArr);
 
-Matrix* CNOTPtr;
-
-
-void initializeGates() {
-	complex_t bitFlipArr[2][2] = {
-		{ 0, 1 },
-		{ 1, 0 }
-	};
-	bitFlipPtr = &Matrix::fromArray(2, 2, (complex_t*) bitFlipArr);
-
-	complex_t hadamardArr[2][2] = {
-		{ 1 / sqrt(2), 1 / sqrt(2) },
-		{ 1 / sqrt(2), -1 / sqrt(2) }
-	};
-	hadamardPtr = &Matrix::fromArray(2, 2, (complex_t*)hadamardArr);
-
-	complex_t CNOTArr[4][4] = {
-		{ 1, 0, 0, 0 },
-		{ 0, 1, 0, 0 },
-		{ 0, 0, 0, 1 },
-		{ 0, 0, 1, 0 }
-	};
-	CNOTPtr = &Matrix::fromArray(4, 4, (complex_t*)CNOTArr);
-
-
-
-}
+static complex_t CNOTArr[4][4] = {
+	{ 1, 0, 0, 0 },
+	{ 0, 1, 0, 0 },
+	{ 0, 0, 0, 1 },
+	{ 0, 0, 1, 0 }
+};
+Matrix& CNOT = Matrix::fromArray(4, 4, (complex_t*)CNOTArr);

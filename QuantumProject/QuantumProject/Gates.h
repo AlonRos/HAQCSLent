@@ -3,13 +3,9 @@
 
 #include "Matrix.h"
 
-extern Matrix* bitFlipPtr;
-extern Matrix* hadamardPtr;
-extern Matrix* CNOTPtr;
-
-
-void initializeGates();
-
+extern Matrix& bitFlip;
+extern Matrix& hadamard;
+extern Matrix& CNOT;
 
 
 #endif
