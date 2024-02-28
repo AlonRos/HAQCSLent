@@ -42,6 +42,8 @@ public:
 
 	Matrix& col(int colIndex);
 
+	Matrix& transpose();
+
 	void print();
 
 	static Matrix& randomMatrix(int m, int n);

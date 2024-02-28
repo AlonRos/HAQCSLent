@@ -25,7 +25,7 @@ Matrix::Matrix(int m, int n, bool JAisRow) : m(m), n(n), jumpArrayIsRow(JAisRow)
 
 }
 
-Matrix::Matrix(int m, int n) :Matrix(m, n, n >= m) {}
+Matrix::Matrix(int m, int n) :Matrix(m, n, n > m) {}
 
 
 // Constructor which gets an array of JA and copys them. The elements themselves does'nt get copied
@@ -87,6 +87,12 @@ Matrix& Matrix::col(int colIndex) {
 }
 
 
+Matrix& Matrix::transpose() {
+	Matrix* returnMatrix = new Matrix(n, m, !jumpArrayIsRow, elements);
+	return *returnMatrix;
+}
+
+
 Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
 	if (A.n != B.m) {
 		throw Exception(runtime_error, "Cannot multiply a {} x {} matrix with a {} x {} matrix", A.m, A.n, B.m, B.n);
@@ -103,13 +109,13 @@ Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
 			}
 
 			returnMatrix->entry(i, j) = res;
-
+			
 			res = 0;
 		}
 	}
 
 	return *returnMatrix;
-
+	
 }
 
 Matrix& Matrix::operator*(Matrix& other) {
@@ -148,7 +154,7 @@ Matrix& Matrix::fromArray(int m, int n, bool JAisRow, complex_t* arr) {
 }
 
 Matrix& Matrix::fromArray(int m, int n, complex_t* arr) {
-	return fromArray(m, n, n >= m, arr);
+	return fromArray(m, n, n > m, arr);
 }
 
 void Matrix::print() {
