@@ -38,6 +38,9 @@ public:
 
 	complex_t& entry(int rowIndex, int colIndex);
 
+	// Return a matrix containing the rows i to j (including i, not including j). The elements are in the same address as this's elements.
+	Matrix& rows(int i, int j);
+
 	Matrix& row(int rowIndex);
 
 	Matrix& col(int colIndex);

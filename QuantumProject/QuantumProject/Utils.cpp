@@ -1,5 +1,5 @@
 #include "Utils.h"
 
-void copyArr(char* src, char* dest, int length, int sizeOfElement) {
-	 copy(src, src + length * sizeOfElement, dest);
+void copyArr(void* src, void* dest, int length, int sizeOfElement) {
+	 copy((char*) src, (char*)src + length * sizeOfElement, (char*)dest);
 }

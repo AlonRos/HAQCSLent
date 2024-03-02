@@ -1,6 +1,10 @@
 #include "Quregister.h"
 
-Quregister::Quregister(int length, int num) : registerLength(length) {
+Quregister::Quregister(int length, int num) : length(length) {
 	int coordsLength = 2 << length;
-	coords = new complex_t[coordsLength];
+	coords = new Matrix(coordsLength, 1);
+}
+
+void Quregister::applyGate(int i, int j, Matrix& gate) {
+	coords = &(gate * coords->rows(i, j));
 }

@@ -2,16 +2,24 @@
 #define Quregister_H
 
 #include <complex>
+#include "Matrix.h"
+
 typedef std::complex<double> complex_t;
 
 
 class Quregister {
 private:
-	int registerLength;
-	complex_t* coords;
+	int length;
+	Matrix* coords;
+	
 
 public:
 	Quregister(int length, int num);
+
+	// Pass the qubits from i to j ([i,j)) through the gate
+	void applyGate(int i, int j, Matrix& gate);
+	
+	
 
 
 };

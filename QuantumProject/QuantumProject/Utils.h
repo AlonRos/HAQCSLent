@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void copyArr(char* src, char* dest, int length, int sizeOfElement);
+void copyArr(void* src, void* dest, int length, int sizeOfElement);
 
 
 

@@ -2,7 +2,6 @@
 #define Qubit_H
 
 #include "complex"
-#include "MeasurementOperator.h"
 
 using namespace std;
 
@@ -14,7 +13,6 @@ private:
 public:
 	Qubit();
 
-	complex<double> measure(MeasurementOperator M);
 
 
 

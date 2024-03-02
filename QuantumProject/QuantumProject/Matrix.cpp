@@ -2,6 +2,8 @@
 #include "GPU.h"
 #include "Utils.h"
 #include <iostream>
+#include <random>
+#include <chrono>
 
 using namespace std;
 
@@ -25,21 +27,11 @@ Matrix::Matrix(int m, int n, bool JAisRow) : m(m), n(n), jumpArrayIsRow(JAisRow)
 
 }
 
-Matrix::Matrix(int m, int n) :Matrix(m, n, n > m) {}
+Matrix::Matrix(int m, int n) :Matrix(m, n, m < n) {}
 
 
 // Constructor which gets an array of JA and copys them. The elements themselves does'nt get copied
-Matrix::Matrix(int m, int n, bool JAisRow, JumpArray<complex_t> elements[]) : m(m), n(n), jumpArrayIsRow(JAisRow) {
-	if (jumpArrayIsRow) {
-		this->elements = (JumpArray<complex_t>*) operator new (m * sizeof(JumpArray<complex_t>));
-		copyArr((char*)elements, (char*)this->elements, m, sizeof(JumpArray<complex_t>));
-	}
-	else {
-		this->elements = (JumpArray<complex_t>*) operator new (n * sizeof(JumpArray<complex_t>));
-		copyArr((char*)elements, (char*)this->elements, n, sizeof(JumpArray<complex_t>));
-
-	}
-}
+Matrix::Matrix(int m, int n, bool JAisRow, JumpArray<complex_t> elements[]) : m(m), n(n), jumpArrayIsRow(JAisRow), elements(elements) {}
 
 complex_t& Matrix::entry(int rowIndex, int colIndex) {
 	if (!(0 <= rowIndex && rowIndex < m && 0 <= colIndex && colIndex < n)) {
@@ -54,20 +46,45 @@ complex_t& Matrix::entry(int rowIndex, int colIndex) {
 	}
 }
 
-Matrix& Matrix::row(int rowIndex) {
-	Matrix* returnRow;
-	if (jumpArrayIsRow) {
-		JumpArray<complex_t> rowElements[] = { elements[rowIndex] };
+Matrix& Matrix::rows(int i, int j) {
+	if (!(0 <= i && i < m && 0 <= j && j <= m)) {
+		throw Exception(out_of_range, "Tried accessing matrix with dim {} x {} with rows ({}, {})", m, n, i, j);
+	}
 
-		returnRow = new Matrix(1, n, true, rowElements);
+	Matrix* returnRow;
+	JumpArray<complex_t>* rowElements = nullptr;
+
+	if (jumpArrayIsRow) { // if m < n then j - i < n
+		rowElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
+
+		copyArr(&elements[i], rowElements, j - i, sizeof(JumpArray<complex_t>));
+
+		returnRow = new Matrix(j - i, n, true, rowElements);
 	}
 	else {
-		JumpArray<complex_t> rowJA = JumpArray<complex_t>(&entry(rowIndex, 0), sizeof(complex_t), n);
-		JumpArray<complex_t> rowElements[] = { rowJA };
-		returnRow = new Matrix(1, n, true, rowElements);
+		if (j - i < n) { // new matrix is rowish
+			rowElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
+
+			for (int k = 0; k < j - i; ++k) {
+				rowElements[k] = *new JumpArray<complex_t>(&entry(k + i, 0), sizeof(complex_t), n);
+			}
+			returnRow = new Matrix(j - i, n, true, rowElements);
+		}
+		else { // new matrix is colish
+			rowElements = (JumpArray<complex_t>*) operator new (n * sizeof(JumpArray<complex_t>));
+
+			for (int k = 0; k < n; ++k) {
+				rowElements[k] = *new JumpArray<complex_t>(&entry(i, k), n * sizeof(complex_t), j - i);
+			}
+			returnRow = new Matrix(j - i, n, false, rowElements);
+		}
 	}
 
 	return *returnRow;
+}
+
+Matrix& Matrix::row(int rowIndex) {
+	return rows(rowIndex, rowIndex + 1);
 }
 
 Matrix& Matrix::col(int colIndex) {
@@ -178,6 +195,8 @@ Matrix& Matrix::randomMatrix(int m, int n) {
 }
 
 Matrix& Matrix::randomMatrix(int m, int n, int bound) {
+	srand(time(NULL));
+
 	Matrix* returnMatrix = new Matrix(m, n);
 
 	for (int i = 0; i < m; ++i) {
