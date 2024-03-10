@@ -7,12 +7,12 @@ using namespace std;
 int main() {
 	
 	
-	Matrix& m = Matrix::randomMatrix(5, 5, 25);
+	Matrix& m = Matrix::randomMatrix(7, 9, 25);
 	m.print();
 
 	cout << '\n';
 
-	m.row(4).print();
+	m.transpose().rows(1, 5).transpose().rows(2, 3).print();
 		
 
 }
