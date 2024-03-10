@@ -41,19 +41,6 @@ Matrix::Matrix(int m, int n, bool JAisRow, JumpArray<complex_t> elements[]) : m(
 	}
 }
 
-complex_t& Matrix::entry(int rowIndex, int colIndex) {
-	if (!(0 <= rowIndex && rowIndex < m && 0 <= colIndex && colIndex < n)) {
-		throw Exception(out_of_range, "Tried accessing matrix with dim {} x {} at entry ({}, {})", m, n, rowIndex, colIndex);
-	}
-	if (jumpArrayIsRow) {
-		return elements[rowIndex][colIndex];
-	}
-	else {
-		return elements[colIndex][rowIndex];
-
-	}
-}
-
 Matrix& Matrix::row(int rowIndex) {
 	Matrix* returnRow;
 	if (jumpArrayIsRow) {

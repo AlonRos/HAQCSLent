@@ -36,7 +36,7 @@ public:
 
 	Matrix& operator*(complex_t scalar);
 
-	complex_t& entry(int rowIndex, int colIndex);
+	inline complex_t& entry(int rowIndex, int colIndex);
 
 	Matrix& row(int rowIndex);
 
@@ -57,6 +57,19 @@ inline Matrix& Matrix::mult(Matrix& A, Matrix& B) {
 #else
 	return cpuMult(A, B);
 #endif
+}
+
+inline complex_t& Matrix::entry(int rowIndex, int colIndex) {
+	if (!(0 <= rowIndex && rowIndex < m && 0 <= colIndex && colIndex < n)) {
+		throw Exception(out_of_range, "Tried accessing matrix with dim {} x {} at entry ({}, {})", m, n, rowIndex, colIndex);
+	}
+	if (jumpArrayIsRow) {
+		return elements[rowIndex][colIndex];
+	}
+	else {
+		return elements[colIndex][rowIndex];
+
+	}
 }
 
 

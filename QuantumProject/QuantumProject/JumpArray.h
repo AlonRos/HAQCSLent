@@ -18,7 +18,7 @@ private:
 public:
 	JumpArray(type* ptr, int jump, int length);
 
-	type& operator[](int index);
+	inline type& operator[](int index);
 
 	type* getPtr();
 
@@ -28,7 +28,7 @@ template<typename type>
 JumpArray<type>::JumpArray(type* ptr, int jump, int length) : jump(jump), firstPointer(ptr), length(length) {}
 
 template<typename type>
-type& JumpArray<type>::operator[](int index) {
+inline type& JumpArray<type>::operator[](int index) {
 	if (index >= length) {
 		throw Exception(out_of_range, "Tried accessing jumpArray with length {} at index {}", length, index);
 	}
