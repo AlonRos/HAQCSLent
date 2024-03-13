@@ -43,6 +43,8 @@ public:
 
 	Matrix& row(int rowIndex);
 
+	Matrix& cols(int i, int j);
+
 	Matrix& col(int colIndex);
 
 	Matrix& transpose();

@@ -12,7 +12,8 @@ int main() {
 
 	cout << '\n';
 
-	m.transpose().rows(1, 5).transpose().rows(2, 3).print();
-		
+	m.cols(1, 5).rows(2, 3).print();
+	m.rows(2, 3).cols(1, 5).print();
+
 
 }

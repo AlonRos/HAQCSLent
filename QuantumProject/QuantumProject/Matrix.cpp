@@ -52,31 +52,43 @@ Matrix& Matrix::rows(int i, int j) {
 	}
 
 	Matrix* returnRow;
-	JumpArray<complex_t>* rowElements = nullptr;
+	JumpArray<complex_t>* rowsElements = nullptr;
 
 	if (jumpArrayIsRow) { // if m < n then j - i < n
-		rowElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
+		rowsElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
 
-		copyArr(&elements[i], rowElements, j - i, sizeof(JumpArray<complex_t>));
+		copyArr(&elements[i], rowsElements, j - i, sizeof(JumpArray<complex_t>));
 
-		returnRow = new Matrix(j - i, n, true, rowElements);
+		returnRow = new Matrix(j - i, n, true, rowsElements);
 	}
 	else {
 		if (j - i < n) { // new matrix is rowish
-			rowElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
+			rowsElements = (JumpArray<complex_t>*) operator new ((j - i) * sizeof(JumpArray<complex_t>));
 
 			for (int k = 0; k < j - i; ++k) {
-				rowElements[k] = *new JumpArray<complex_t>(&entry(k + i, 0), sizeof(complex_t), n);
+				if (n >= 2) {
+					rowsElements[k] = *new JumpArray<complex_t>(&entry(k + i, 0), (&entry(k + i, 1) - &entry(k + i, 0)) * sizeof(complex_t), n);
+				}
+				else {
+					rowsElements[k] = *new JumpArray<complex_t>(&entry(k + i, 0), sizeof(complex_t), n);
+
+				}
 			}
-			returnRow = new Matrix(j - i, n, true, rowElements);
+			returnRow = new Matrix(j - i, n, true, rowsElements);
 		}
 		else { // new matrix is colish
-			rowElements = (JumpArray<complex_t>*) operator new (n * sizeof(JumpArray<complex_t>));
+			rowsElements = (JumpArray<complex_t>*) operator new (n * sizeof(JumpArray<complex_t>));
 
 			for (int k = 0; k < n; ++k) {
-				rowElements[k] = *new JumpArray<complex_t>(&entry(i, k), n * sizeof(complex_t), j - i);
+				if (m >= 2) {
+					rowsElements[k] = *new JumpArray<complex_t>(&entry(i, k), (&entry(1, 0) - &entry(0, 0)) * sizeof(complex_t), j - i);
+				}
+				else {
+					rowsElements[k] = *new JumpArray<complex_t>(&entry(i, k), sizeof(complex_t), j - i);
+				}
+
 			}
-			returnRow = new Matrix(j - i, n, false, rowElements);
+			returnRow = new Matrix(j - i, n, false, rowsElements);
 		}
 	}
 
@@ -87,20 +99,12 @@ Matrix& Matrix::row(int rowIndex) {
 	return rows(rowIndex, rowIndex + 1);
 }
 
+Matrix& Matrix::cols(int i, int j) {
+	return transpose().rows(i, j).transpose();
+}
+
 Matrix& Matrix::col(int colIndex) {
-	Matrix* returnCol;
-	if (jumpArrayIsRow) {
-		JumpArray<complex_t> colJA = JumpArray<complex_t>(&entry(0, colIndex), sizeof(complex_t), m);
-		JumpArray<complex_t> colElements[] = { colJA };
-		returnCol = new Matrix(m, 1, false, colElements);
-	}
-	else {
-		JumpArray<complex_t> colElements[] = { elements[colIndex] };
-		returnCol = new Matrix(m, 1, false, colElements);
-	}
-
-	return *returnCol;
-
+	return cols(colIndex, colIndex + 1);
 }
 
 
