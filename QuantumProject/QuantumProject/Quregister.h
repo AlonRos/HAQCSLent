@@ -19,6 +19,8 @@ public:
 	// Pass the qubits from i to j ([i,j)) through the gate
 	void applyGate(int i, int j, Matrix& gate);
 	
+	void applyGate(Matrix& gate);
+
 	
 
 

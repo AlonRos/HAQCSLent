@@ -113,15 +113,12 @@ Matrix& Matrix::transpose() {
 	return *returnMatrix;
 }
 
-
-Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
+void Matrix::cpuMultIn(Matrix& A, Matrix& B, Matrix& saveIn) {
 	if (A.n != B.m) {
 		throw Exception(runtime_error, "Cannot multiply a {} x {} matrix with a {} x {} matrix", A.m, A.n, B.m, B.n);
 	}
 
-	Matrix* returnMatrix = new Matrix(A.m, B.n);
 	complex_t res = 0;
-
 	for (int i = 0; i < A.m; ++i) {
 		for (int j = 0; j < B.n; ++j) {
 
@@ -129,11 +126,17 @@ Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
 				res += A.entry(i, k) * B.entry(k, j);
 			}
 
-			returnMatrix->entry(i, j) = res;
-			
+			saveIn.entry(i, j) = res;
+
 			res = 0;
 		}
 	}
+}
+
+Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
+	Matrix* returnMatrix = new Matrix(A.m, B.n);
+	
+	cpuMultIn(A, B, *returnMatrix);
 
 	return *returnMatrix;
 	

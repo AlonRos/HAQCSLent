@@ -14,6 +14,9 @@ private:
 
 	static Matrix& gpuMult(Matrix& A, Matrix& B);
 	static Matrix& cpuMult(Matrix& A, Matrix& B);
+	static void gpuMultIn(Matrix& A, Matrix& B, Matrix& saveIn);
+	static void cpuMultIn(Matrix& A, Matrix& B, Matrix& saveIn);
+
 
 
 public:
@@ -31,6 +34,8 @@ public:
 	static Matrix& fromArray(int m, int n, complex_t* arr);
 
 	inline static Matrix& mult(Matrix& A, Matrix& B);
+
+	inline static void multIn(Matrix& A, Matrix& B, Matrix& saveIn);
 
 	Matrix& operator*(Matrix& other);
 
@@ -66,5 +71,12 @@ inline Matrix& Matrix::mult(Matrix& A, Matrix& B) {
 #endif
 }
 
+inline void Matrix::multIn(Matrix& A, Matrix& B, Matrix& saveIn) {
+#ifdef USEGPU
+	return gpuMultIn(A, B, saveIn);
+#else
+	return cpuMultIn(A, B, saveIn);
+#endif
+}
 
 #endif

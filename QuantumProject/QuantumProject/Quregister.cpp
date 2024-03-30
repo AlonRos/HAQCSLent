@@ -5,6 +5,6 @@ Quregister::Quregister(int length, int num) : length(length) {
 	coords = new Matrix(coordsLength, 1);
 }
 
-void Quregister::applyGate(int i, int j, Matrix& gate) {
-	coords = &(gate * coords->rows(i, j));
+void Quregister::applyGate(Matrix& gate) {
+	Matrix::multIn(gate, *coords, *coords);
 }
