@@ -1,5 +1,4 @@
 #include "Matrix.h"
-#include "GPU.h"
 #include "Utils.h"
 #include <iostream>
 #include <random>
@@ -8,7 +7,7 @@
 using namespace std;
 
 Matrix::Matrix(int m, int n, bool JAisRow) : m(m), n(n), jumpArrayIsRow(JAisRow) {
-	complex_t* allocatedMemory = (complex_t*)libraryCalloc(m * n * sizeof(complex_t));
+	complex_t* allocatedMemory = (complex_t*)calloc(m * n * sizeof(complex_t), 1);
 	if (JAisRow) {
 		elements = (JumpArray<complex_t>*) operator new (m * sizeof(JumpArray<complex_t>));
 
@@ -133,17 +132,18 @@ void Matrix::cpuMultIn(Matrix& A, Matrix& B, Matrix& saveIn) {
 	}
 }
 
-Matrix& Matrix::cpuMult(Matrix& A, Matrix& B) {
-	Matrix* returnMatrix = new Matrix(A.m, B.n);
-	
-	cpuMultIn(A, B, *returnMatrix);
+void Matrix::cpuAddIn(Matrix& A, Matrix& B, Matrix& saveIn) {
+	if (A.m != B.m or A.n != B.n) {
+		throw Exception(runtime_error, "Cannot multiply a {} x {} matrix with a {} x {} matrix", A.m, A.n, B.m, B.n);
+	}
 
-	return *returnMatrix;
-	
-}
+	int m = A.m, n = A.n;
 
-Matrix& Matrix::operator*(Matrix& other) {
-	return Matrix::mult(*this, other);
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			saveIn.entry(i, j) = A.entry(i, j) + B.entry(i, j);
+		}
+	}
 }
 
 Matrix& Matrix::operator*(complex_t scalar) {
@@ -202,7 +202,6 @@ Matrix& Matrix::randomMatrix(int m, int n) {
 }
 
 Matrix& Matrix::randomMatrix(int m, int n, int bound) {
-	srand(time(NULL));
 
 	Matrix* returnMatrix = new Matrix(m, n);
 

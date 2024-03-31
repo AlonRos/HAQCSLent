@@ -1,19 +1,35 @@
 #include <iostream>
 #include "Matrix.h"
 #include "Gates.h"
+#include <random>
+#include <chrono>
+ 
+ using namespace std;
+ 
+ int main() {
+	 srand(time(NULL));
 
-using namespace std;
+	 int c = 20;
 
-int main() {
-	
-	
-	Matrix& m = Matrix::randomMatrix(7, 9, 25);
-	m.print();
+	 int duration = 0;
+	 for (int i = 0; i < c; ++i) {
+		 Matrix& m1 = Matrix::randomMatrix(1000, 1000, 25);
+		 //m1.print();
+		 //cout << "\n";
 
-	cout << '\n';
+		 Matrix& m2 = Matrix::randomMatrix(1000, 1000, 25);
+		 //m2.print();
+		 //cout << "\n";
 
-	m.cols(1, 5).rows(2, 3).print();
-	m.rows(2, 3).cols(1, 5).print();
+
+		 auto start = chrono::high_resolution_clock::now();
+		 m1 + m2;
+		 auto stop = chrono::high_resolution_clock::now();
+		 duration += duration_cast<chrono::milliseconds>(stop - start).count();
+		 //cout << "\n";
+		 //cout << "\n";
 
 
-}
+	 }
+	 cout << duration / c;
+ }
