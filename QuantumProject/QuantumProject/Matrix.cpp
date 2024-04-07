@@ -23,7 +23,6 @@ Matrix::Matrix(int m, int n, bool JAisRow) : m(m), n(n), jumpArrayIsRow(JAisRow)
 			elements[i] = JumpArray<complex_t>(allocatedMemory + i, n * sizeof(complex_t), m);
 		}
 	}
-
 }
 
 Matrix::Matrix(int m, int n) :Matrix(m, n, m < n) {}

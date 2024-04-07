@@ -106,11 +106,19 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <Optimization>Full</Optimization>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CudaCompile />
+    <CudaCompile>
+      <CodeGeneration>compute_75,sm_75</CodeGeneration>
+      <FastMath>false</FastMath>
+      <AdditionalOptions>--generate-code=arch=compute_75,code=[compute_75,sm_75] %(AdditionalOptions)</AdditionalOptions>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -131,9 +139,9 @@
   <ItemGroup>
     <ClInclude Include="Gates.h" />
     <ClInclude Include="CudaHeader.cuh" />
+    <ClInclude Include="JumpArray.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="JumpArray.h" />
     <ClInclude Include="Qubit.h" />
     <ClInclude Include="Quregister.h" />
     <ClInclude Include="Utils.h" />
@@ -148,7 +156,8 @@
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="CudaSource.cu" />
+    <CudaCompile Include="cudaAdd.cu" />
+    <CudaCompile Include="CudaMult.cu" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
