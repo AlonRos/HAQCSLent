@@ -7,7 +7,7 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 
-#define DEBUG5
+#define DEBUG3
  
  using namespace std;
  
@@ -62,7 +62,7 @@
 		auto stop = chrono::high_resolution_clock::now();
 		duration += duration_cast<chrono::milliseconds>(stop - start).count();
 		
-#ifdef DEBUG3
+#ifdef DEBUG
 		m.print();
 		cout << "\n";
 		cout << "\n";

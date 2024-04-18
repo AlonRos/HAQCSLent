@@ -664,7 +664,7 @@ void Matrix::gpuMultIn(Matrix& A, Matrix& B, Matrix& res) {
     dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
     dim3 dimGrid(dev_B.width / dimBlock.x, dev_A.height / dimBlock.y);
 
-    //MatMulKernel << <dimGrid, dimBlock >> > (dev_A, dev_B, dev_res);  // doing 1024*1024 in 1000ms 
+    MatMulKernel << <dimGrid, dimBlock >> > (dev_A, dev_B, dev_res);  // doing 1024*1024 in 1000ms 
 
     //constexpr unsigned int BLOCK_TILE_SIZE_X{ 64 };
     //constexpr unsigned int BLOCK_TILE_SIZE_Y{ 128 };
@@ -701,11 +701,11 @@ void Matrix::gpuMultIn(Matrix& A, Matrix& B, Matrix& res) {
     const uint K10_TM = 8;
 
 
-    dim3 blockDim(K10_NUM_THREADS);
-    dim3 gridDim(CEIL_DIV(N, K10_BN), CEIL_DIV(M, K10_BM));
-    sgemmWarptiling<K10_BM, K10_BN, K10_BK, K10_WM, K10_WN, K10_WNITER, K10_TM,
-        K10_TN, K10_NUM_THREADS>
-        << <gridDim, blockDim >> > (M, N, K, dev_A.elements, dev_B.elements, dev_res.elements);
+    //dim3 blockDim(K10_NUM_THREADS);
+    //dim3 gridDim(CEIL_DIV(N, K10_BN), CEIL_DIV(M, K10_BM));
+    //sgemmWarptiling<K10_BM, K10_BN, K10_BK, K10_WM, K10_WN, K10_WNITER, K10_TM,
+    //    K10_TN, K10_NUM_THREADS>
+    //    << <gridDim, blockDim >> > (M, N, K, dev_A.elements, dev_B.elements, dev_res.elements);
 
 
     printf("Error: %d\n", cudaGetLastError());

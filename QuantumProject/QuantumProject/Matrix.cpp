@@ -183,7 +183,7 @@ Matrix& Matrix::fromArray(int m, int n, complex_t* arr) {
 void Matrix::print() {
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			cout << entry(i, j) << " ";
+			cout << (int)entry(i, j).real() << " ";
 		}
 		cout << '\n';
 	}
