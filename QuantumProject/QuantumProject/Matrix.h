@@ -94,6 +94,7 @@ inline Matrix& Matrix::mult(Matrix& A, Matrix& B) {
 
 inline void Matrix::multIn(Matrix& A, Matrix& B, Matrix& saveIn) {
 #ifdef USEGPU
+
 	return gpuMultIn(A, B, saveIn);
 #else
 	return cpuMultIn(A, B, saveIn);

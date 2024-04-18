@@ -183,7 +183,7 @@ Matrix& Matrix::fromArray(int m, int n, complex_t* arr) {
 void Matrix::print() {
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			cout << entry(i, j) << " ";
+			cout << entry(i, j).real() << "+" << entry(i,j).imag() << "i" << " ";
 		}
 		cout << '\n';
 	}
@@ -194,7 +194,7 @@ Matrix& Matrix::randomMatrix(int m, int n) {
 
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			returnMatrix->entry(i, j) = rand();
+			returnMatrix->entry(i, j) = complex_t(rand(), rand());
 		}
 	}
 	return *returnMatrix;
@@ -206,7 +206,7 @@ Matrix& Matrix::randomMatrix(int m, int n, int bound) {
 
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			returnMatrix->entry(i, j) = rand() % bound;
+			returnMatrix->entry(i, j) = complex_t(rand() % bound, rand() % bound);
 		}
 	}
 	return *returnMatrix;

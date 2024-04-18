@@ -5,6 +5,8 @@
 #include "device_launch_parameters.h"
 #include <cuComplex.h>
 
+#define BLOCK_SIZE 16
+
 __host__
 inline cuDoubleComplex complexToCudaComplex(complex_t z) {
 	return make_cuDoubleComplex(z.real(), z.imag());
