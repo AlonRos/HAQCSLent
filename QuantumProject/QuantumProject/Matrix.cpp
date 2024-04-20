@@ -111,22 +111,52 @@ Matrix& Matrix::transpose() {
 	return *returnMatrix;
 }
 
+Matrix& Matrix::conjTranspose() {
+	Matrix* returnMatrix = new Matrix(n, m, !jumpArrayIsRow);
+	for (int i = 0; i < n; ++i) {
+		for (int j = 0; j < m; ++j) {
+			returnMatrix->entry(i, j) = entry(j, i);
+		}
+	}
+	return* returnMatrix;
+
+}
+
+double complexNormSquared(complex_t z) {
+	double real = z.real(), imag = z.imag();
+	return real * real + imag * imag;
+}
+
+double Matrix::normSquared() {
+	double res = 0, curr;
+
+	for (int i = 0; i < m; ++i) {
+		for (int j = 0; j < n; ++j) {
+			res += complexNormSquared(entry(i,j));
+		}
+	}
+
+	return res;
+}
+
 void Matrix::cpuMultIn(Matrix& A, Matrix& B, Matrix& saveIn) {
 	if (A.n != B.m) {
 		throw Exception(runtime_error, "Cannot multiply a {} x {} matrix with a {} x {} matrix", A.m, A.n, B.m, B.n);
 	}
 
-	complex_t res = 0;
+	complex_t* res = new complex_t[A.m * B.n];
 	for (int i = 0; i < A.m; ++i) {
 		for (int j = 0; j < B.n; ++j) {
 
 			for (int k = 0; k < A.n; ++k) {
-				res += A.entry(i, k) * B.entry(k, j);
+				res[B.n * i + j] += A.entry(i, k) * B.entry(k, j);
 			}
+		}
+	}
 
-			saveIn.entry(i, j) = res;
-
-			res = 0;
+	for (int i = 0; i < A.m; ++i) {
+		for (int j = 0; j < B.n; ++j) {
+			saveIn.entry(i, j) = res[B.n * i + j];
 		}
 	}
 }

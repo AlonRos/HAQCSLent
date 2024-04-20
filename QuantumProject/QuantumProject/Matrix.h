@@ -5,7 +5,7 @@
 #include "JumpArray.h"
 
 typedef std::complex<double> complex_t;
-#define USEGPU
+//#define USEGPU
 
 
 class Matrix { // m * n Matrix
@@ -63,6 +63,10 @@ public:
 	Matrix& col(int colIndex);
 
 	Matrix& transpose();
+
+	Matrix& conjTranspose();
+
+	double normSquared();
 
 	void print();
 
