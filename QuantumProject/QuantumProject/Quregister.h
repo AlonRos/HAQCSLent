@@ -3,6 +3,7 @@
 
 #include <complex>
 #include "Matrix.h"
+#include <vector>
 
 typedef std::complex<double> complex_t;
 
@@ -11,6 +12,7 @@ class Quregister {
 private:
 	int length;
 	Matrix* coords;
+	int coordsLength;
 	
 
 public:
@@ -21,8 +23,15 @@ public:
 	
 	void applyGate(Matrix& gate);
 
-	
+	int regMeasure(vector<Quregister> basis);
 
+	int regMeasureComputational();
+
+	int getRegLength();
+
+	int getCoordsLength();
+
+	Matrix* getCoords();
 
 };
 
