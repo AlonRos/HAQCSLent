@@ -19,7 +19,7 @@ int Quregister::getCoordsLength() {
 	return coordsLength;
 }
 
-Matrix* Quregister::getCoords() {
+Matrix*& Quregister::getCoords() {
 	return coords;
 }
 

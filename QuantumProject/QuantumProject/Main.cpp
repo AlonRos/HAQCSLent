@@ -33,7 +33,10 @@
 
 	 r1.getCoords()->print();
 
-	 cout << r1.regMeasureComputational();
-	
+	 cout << r1.regMeasureComputational() << '\n';
+
+	 r1.getCoords()->print();
+
+
 	
  }

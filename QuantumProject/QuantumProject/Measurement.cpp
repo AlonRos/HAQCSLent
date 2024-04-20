@@ -4,7 +4,7 @@ double rand01() {
 	return ((double)rand()) / RAND_MAX;
 }
 
-int measure(Quregister reg, vector<Quregister> basis) {
+int measure(Quregister& reg, vector<Quregister> basis) {
 	int coordsLength = reg.getCoordsLength();
 
 	Matrix** measurementMatrices = (Matrix**) operator new (sizeof(Matrix*) * coordsLength);
@@ -26,7 +26,10 @@ int measure(Quregister reg, vector<Quregister> basis) {
 	double randNumber = rand01();
 
 	for (int i = 0; i < coordsLength; ++i) {
-		if (randNumber < probs[i]) return i;
+		if (randNumber < probs[i]) {
+			reg.getCoords() = basis[i].getCoords();
+			return i;
+		}
 		randNumber -= probs[i];
 	}
 
@@ -34,7 +37,7 @@ int measure(Quregister reg, vector<Quregister> basis) {
 	return 0;
 }
 
-int measureComputational(Quregister reg) {
+int measureComputational(Quregister& reg) {
 	vector<Quregister> basis;
 	int regLength = reg.getRegLength(), coordsLength = reg.getCoordsLength();
 

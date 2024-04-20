@@ -31,7 +31,7 @@ public:
 
 	int getCoordsLength();
 
-	Matrix* getCoords();
+	Matrix*& getCoords();
 
 };
 

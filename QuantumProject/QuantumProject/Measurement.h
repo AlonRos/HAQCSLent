@@ -9,9 +9,9 @@
 using namespace std;
 
 // the basis is orthonormal
-int measure(Quregister reg, vector<Quregister> basis);
+int measure(Quregister& reg, vector<Quregister> basis);
 
-int measureComputational(Quregister reg);
+int measureComputational(Quregister& reg);
 
 
 #endif
