@@ -4,6 +4,20 @@ double rand01() {
 	return ((double)rand()) / RAND_MAX;
 }
 
+int randomIndexProbs(double* probs, int probesLength) {
+	double randNumber = rand01();
+
+	for (int i = 0; i < coordsLength; ++i) {
+		if (randNumber < probs[i]) {
+			return i;
+		}
+		randNumber -= probs[i];
+	}
+
+
+	return 0;
+}
+
 int measure(Quregister& reg, vector<Quregister> basis) {
 	int coordsLength = reg.getCoordsLength();
 
@@ -23,27 +37,24 @@ int measure(Quregister& reg, vector<Quregister> basis) {
 		free(measurementMatrices[i]);
 	}
 
-	double randNumber = rand01();
+	int i = randomIndexProbs(probs, coordsLength);
+	reg.getCoords() = basis[i].getCoords();
+	return i;
 
-	for (int i = 0; i < coordsLength; ++i) {
-		if (randNumber < probs[i]) {
-			reg.getCoords() = basis[i].getCoords();
-			return i;
-		}
-		randNumber -= probs[i];
-	}
 
-	
-	return 0;
 }
 
 int measureComputational(Quregister& reg) {
 	vector<Quregister> basis;
 	int regLength = reg.getRegLength(), coordsLength = reg.getCoordsLength();
 
+	Matrix* coords = reg.getCoords();
+	double* probs = new double[coordsLength];
 	for (int i = 0; i < coordsLength; ++i) {
-		basis.push_back(Quregister(regLength, i));
+		probs[i] = complexNormSquared(coords.entry(i, 0));
 	}
 
-	return measure(reg, basis);
+	int i = randomIndexProbs(probs, coordsLength);
+	reg.getCoords() = basis[i].getCoords();
+	return i;
 }
