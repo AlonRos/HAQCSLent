@@ -4,8 +4,12 @@
 #include "Gates.h"
 #include <random>
 #include <chrono>
+
+#ifdef USEGPU
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#endif
+
 #include "Quregister.h"
 
  
@@ -22,20 +26,20 @@
  }
 
  int main() {
-	 int x = 3;
-
-
 	 init();
 
 	 Quregister r1(1, 0);
 
-	 r1.applyGate(hadamard);
+	 int c = 1e5;
 
-	 r1.getCoords()->print();
+	 int amount1 = 0;
+	 for (int i = 0; i < c; ++i) {
+		 r1.applyGate(hadamard);
 
-	 cout << r1.regMeasureComputational() << '\n';
+		 amount1 += r1.regMeasureComputational();
+	 }
 
-	 r1.getCoords()->print();
+	 cout << (double)amount1 / c;
 
 
 	

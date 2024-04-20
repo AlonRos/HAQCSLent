@@ -1,13 +1,9 @@
 #include "Measurement.h"
 
-double rand01() {
-	return ((double)rand()) / RAND_MAX;
-}
-
-int randomIndexProbs(double* probs, int probesLength) {
+int randomIndexProbs(double* probs, int probsLength) {
 	double randNumber = rand01();
 
-	for (int i = 0; i < coordsLength; ++i) {
+	for (int i = 0; i < probsLength; ++i) {
 		if (randNumber < probs[i]) {
 			return i;
 		}
@@ -15,7 +11,7 @@ int randomIndexProbs(double* probs, int probesLength) {
 	}
 
 
-	return 0;
+	return probsLength - 1;
 }
 
 int measure(Quregister& reg, vector<Quregister> basis) {
@@ -45,16 +41,17 @@ int measure(Quregister& reg, vector<Quregister> basis) {
 }
 
 int measureComputational(Quregister& reg) {
-	vector<Quregister> basis;
 	int regLength = reg.getRegLength(), coordsLength = reg.getCoordsLength();
 
 	Matrix* coords = reg.getCoords();
 	double* probs = new double[coordsLength];
 	for (int i = 0; i < coordsLength; ++i) {
-		probs[i] = complexNormSquared(coords.entry(i, 0));
+		probs[i] = complexNormSquared(coords->entry(i, 0));
 	}
 
 	int i = randomIndexProbs(probs, coordsLength);
-	reg.getCoords() = basis[i].getCoords();
+	reg.getCoords() = new Matrix(coordsLength, 1);
+	reg.getCoords()->entry(i, 0) = 1;
+
 	return i;
 }
