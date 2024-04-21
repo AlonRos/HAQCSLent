@@ -143,7 +143,6 @@
     <ClInclude Include="CudaHeader.cuh" />
     <ClInclude Include="JumpArray.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Matrix2.h" />
     <ClInclude Include="Measurement.h" />
     <ClInclude Include="Quregister.h" />
@@ -153,7 +152,6 @@
     <ClCompile Include="Gates.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Matrix2.cpp" />
     <ClCompile Include="Measurement.cpp" />
     <ClCompile Include="Quregister.cpp" />

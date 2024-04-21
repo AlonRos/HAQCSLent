@@ -131,7 +131,7 @@ double* gpuMultDouble(double* A, int Am, int An, double* B, int Bn) {
 }
 
 __host__
-void Matrix::gpuMultIn(Matrix& A, Matrix& B, Matrix& res) {
+void Matrix2::gpuMultIn(Matrix2& A, Matrix2& B, Matrix2& res) {
 	size_t size = A.m * A.n * sizeof(double);
 
 	double* realA = (double*) malloc(size);

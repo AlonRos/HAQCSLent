@@ -7,9 +7,9 @@
 
 typedef std::complex<double> complex_t;
 
-//#define USEGPU
+#define USEGPU
 
-class Matrix2 { // m * n Matrix2
+class Matrix2 { // m * n Matrix
 private:
 	bool rowwise;
 	int jump;
@@ -101,7 +101,7 @@ inline Matrix2& Matrix2::operator+(Matrix2& other) {
 
 inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 #ifdef USEGPU
-	if (A.m * A.n * B.m * B.n > 421875000) {
+	if ((long long) A.m * A.n * B.m * B.n > 421875000) {
 		return gpuMult(A, B);
 	}
 	return cpuMult(A, B);
@@ -113,7 +113,7 @@ inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 
 inline void Matrix2::multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 #ifdef USEGPU
-	if (A.m * A.n * B.m * B.n > 421875000) {
+	if ((long long) A.m * A.n * B.m * B.n > 421875000) {
 		return gpuMultIn(A, B, saveIn);
 	}
 	return cpuMultIn(A, B, saveIn);

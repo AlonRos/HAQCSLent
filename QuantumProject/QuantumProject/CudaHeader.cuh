@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Matrix.h"
+#include "Matrix2.h"
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #include <cuComplex.h>

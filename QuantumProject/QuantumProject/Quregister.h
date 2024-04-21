@@ -2,7 +2,7 @@
 #define Quregister_H
 
 #include <complex>
-#include "Matrix.h"
+#include "Matrix2.h"
 #include <vector>
 
 typedef std::complex<double> complex_t;
@@ -11,7 +11,7 @@ typedef std::complex<double> complex_t;
 class Quregister {
 private:
 	int length;
-	Matrix* coords;
+	Matrix2* coords;
 	int coordsLength;
 	
 
@@ -19,9 +19,9 @@ public:
 	Quregister(int length, int num);
 
 	// Pass the qubits from i to j ([i,j)) through the gate
-	void applyGate(int i, int j, Matrix& gate);
+	void applyGate(int i, int j, Matrix2& gate);
 	
-	void applyGate(Matrix& gate);
+	void applyGate(Matrix2& gate);
 
 	int regMeasure(vector<Quregister> basis);
 
@@ -31,7 +31,7 @@ public:
 
 	int getCoordsLength();
 
-	Matrix*& getCoords();
+	Matrix2*& getCoords();
 
 };
 

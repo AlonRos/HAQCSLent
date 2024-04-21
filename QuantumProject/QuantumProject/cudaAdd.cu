@@ -20,10 +20,8 @@ void matAddKernel(cuDoubleComplex* A, cuDoubleComplex* B, cuDoubleComplex* res, 
 
 }
 
-
-
 __host__
-void Matrix::gpuAddIn(Matrix& A, Matrix& B, Matrix& res) {
+void Matrix2::gpuAddIn(Matrix2& A, Matrix2& B, Matrix2& res) {
 	cuDoubleComplex* A_vals, * B_vals, * res_vals;
 
 	int m = A.m, n = A.n;

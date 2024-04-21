@@ -1,11 +1,11 @@
 #ifndef Gates_H
 #define Gates_h
 
-#include "Matrix.h"
+#include "Matrix2.h"
 
-extern Matrix& bitFlip;
-extern Matrix& hadamard;
-extern Matrix& CNOT;
+extern Matrix2& bitFlip;
+extern Matrix2& hadamard;
+extern Matrix2& CNOT;
 
 
 #endif

@@ -17,12 +17,12 @@ int randomIndexProbs(double* probs, int probsLength) {
 int measure(Quregister& reg, vector<Quregister> basis) {
 	int coordsLength = reg.getCoordsLength();
 
-	Matrix** measurementMatrices = (Matrix**) operator new (sizeof(Matrix*) * coordsLength);
-	Matrix* currentCoords;
+	Matrix2** measurementMatrices = (Matrix2**) operator new (sizeof(Matrix2*) * coordsLength);
+	Matrix2* currentCoords;
 
 	for (int i = 0; i < coordsLength; ++i) {
 		currentCoords = basis[i].getCoords();
-		measurementMatrices[i] = &Matrix::mult(*currentCoords, currentCoords->conjTranspose());
+		measurementMatrices[i] = &Matrix2::mult(*currentCoords, currentCoords->conjTranspose());
 	}
 
 	double* probs = new double[coordsLength];
@@ -43,14 +43,14 @@ int measure(Quregister& reg, vector<Quregister> basis) {
 int measureComputational(Quregister& reg) {
 	int regLength = reg.getRegLength(), coordsLength = reg.getCoordsLength();
 
-	Matrix* coords = reg.getCoords();
+	Matrix2* coords = reg.getCoords();
 	double* probs = new double[coordsLength];
 	for (int i = 0; i < coordsLength; ++i) {
 		probs[i] = complexNormSquared(coords->entry(i, 0));
 	}
 
 	int i = randomIndexProbs(probs, coordsLength);
-	reg.getCoords() = new Matrix(coordsLength, 1);
+	reg.getCoords() = new Matrix2(coordsLength, 1);
 	reg.getCoords()->entry(i, 0) = 1;
 
 	return i;

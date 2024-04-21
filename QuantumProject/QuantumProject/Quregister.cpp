@@ -3,12 +3,12 @@
 
 Quregister::Quregister(int length, int num) : length(length) {
 	coordsLength = 1 << length;
-	coords = new Matrix(coordsLength, 1);
+	coords = new Matrix2(coordsLength, 1);
 	coords->entry(num, 0) = 1;
 }
 
-void Quregister::applyGate(Matrix& gate) {
-	Matrix::multIn(gate, *coords, *coords);
+void Quregister::applyGate(Matrix2& gate) {
+	Matrix2::multIn(gate, *coords, *coords);
 }
 
 int Quregister::getRegLength() {
@@ -19,7 +19,7 @@ int Quregister::getCoordsLength() {
 	return coordsLength;
 }
 
-Matrix*& Quregister::getCoords() {
+Matrix2*& Quregister::getCoords() {
 	return coords;
 }
 

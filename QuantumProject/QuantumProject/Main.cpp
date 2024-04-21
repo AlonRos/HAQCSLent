@@ -18,8 +18,8 @@
  void init() {
 
 #ifdef USEGPU // the first function in the gpu takes more time
-	 Matrix& mat1 = Matrix::randomMatrix(16, 16, 25);
-	 Matrix& mat2 = Matrix::randomMatrix(16, 16, 25);
+	 Matrix2& mat1 = Matrix2::randomMatrix(16, 16, 25);
+	 Matrix2& mat2 = Matrix2::randomMatrix(16, 16, 25);
 	 mat1 * mat2;
 #endif
  }
