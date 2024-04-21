@@ -17,3 +17,7 @@ double complexNormSquared(complex_t z) {
 double rand01() {
 	return dis(gen);
 }
+
+int randBound(int bound) {
+	return (int)(rand01() * bound);
+}

@@ -5,7 +5,7 @@
 #include "JumpArray.h"
 
 typedef std::complex<double> complex_t;
-#define USEGPU
+//#define USEGPU
 
 
 class Matrix { // m * n Matrix

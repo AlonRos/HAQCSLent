@@ -15,13 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Qubit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Quregister.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Matrix.h">
@@ -42,11 +36,14 @@
     <ClInclude Include="Measurement.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Qubit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Quregister.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,6 +63,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Measurement.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Matrix2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
