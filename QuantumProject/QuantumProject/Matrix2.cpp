@@ -17,7 +17,7 @@ Matrix2::Matrix2(int m, int n, bool rowwise) : m(m), n(n), rowwise(rowwise) {
 Matrix2::Matrix2(int m, int n, complex_t* elements, bool rowwise, int jump) : m(m), n(n), elements(elements), rowwise(rowwise), jump(jump) {}
 
 Matrix2::Matrix2(int m, int n, complex_t* arr) : m(m), n(n), rowwise(true), jump(n) {
-	elements = (complex_t*)malloc(m * n * sizeof(complex_t));
+	elements = (complex_t*) malloc(m * n * sizeof(complex_t));
 	copy(arr, arr + m * n, elements);
 }
 
@@ -114,19 +114,13 @@ void Matrix2::cpuMultIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 	}
 
 	complex_t* res = new complex_t[A.m * B.n];
-	register int help1 = 0, help2 = 0, sum, i = 0, j = 0, k = 0;
-	complex_t temp;
 
-	for (i = 0; i < A.n; ++i) {
-		help2 = 0;
-		for (k = 0; k < A.n; ++k) {
-			temp = A.elements[help1 + k];
-			for (j = 0; j < A.n; j++) {
-				res[help1 + j] += temp * B.elements[help2 + j];
+	for (int i = 0; i < A.m; ++i) {
+		for (int k = 0; k < A.n; ++k) {
+			for (int j = 0; j < B.n; ++j) {
+				res[B.n * i + j] += A.entry(i, k) * B.entry(k, j);
 			}
-			help2 += A.n;
 		}
-		help1 += A.n;
 	}
 
 	for (int i = 0; i < A.m; ++i) {
@@ -178,7 +172,11 @@ Matrix2& Matrix2::randomMatrix(int m, int n, int bound) {
 void Matrix2::print() {
 	for (int i = 0; i < m; ++i) {
 		for (int j = 0; j < n; ++j) {
-			if (entry(i, j).imag() > 0) {
+			if (entry(i, j).real() == 0) {
+				cout << entry(i, j).imag() << "i" << " ";
+
+			}
+			else if (entry(i, j).imag() > 0) {
 				cout << entry(i, j).real() << "+" << entry(i, j).imag() << "i" << " ";
 			}
 			else if (entry(i, j).imag() < 0) {

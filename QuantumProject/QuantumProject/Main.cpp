@@ -4,13 +4,12 @@
 #include "Gates.h"
 #include <random>
 #include <chrono>
+#include "Quregister.h"
 
 #ifdef USEGPU
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
 #endif
-
-#include "Quregister.h"
 
  
  using namespace std;
@@ -18,9 +17,9 @@
  void init() {
 
 #ifdef USEGPU // the first function in the gpu takes more time
-	 Matrix2& mat1 = Matrix2::randomMatrix(16, 16, 25);
-	 Matrix2& mat2 = Matrix2::randomMatrix(16, 16, 25);
-	 mat1 * mat2;
+	 Matrix2& m1 = Matrix2::randomMatrix(1024, 1024, 25);
+	 Matrix2& m2 = Matrix2::randomMatrix(1024, 1024, 25);
+	 m1 * m2;
 #endif
  }
 
@@ -62,8 +61,10 @@
 		 cout << "\n";
 		 cout << "\n";
 #endif
+		 delete &m1;
+		 delete &m2;
+		 delete &m;
 
-		 free(&m);
 	 }
 
 	 cout << duration / c;
