@@ -5,7 +5,7 @@
 #include "JumpArray.h"
 
 typedef std::complex<double> complex_t;
-//#define USEGPU
+#define USEGPU
 
 
 class Matrix { // m * n Matrix
@@ -38,6 +38,8 @@ public:
 	static Matrix& fromArray(int m, int n, complex_t* arr);
 
 	inline static Matrix& mult(Matrix& A, Matrix& B);
+
+	inline static Matrix& mult(Matrix& A, Matrix& B, bool gpu);
 
 	inline static void multIn(Matrix& A, Matrix& B, Matrix& saveIn);
 
@@ -87,6 +89,12 @@ inline Matrix& Matrix::operator+(Matrix& other) {
 
 // multiply
 
+inline Matrix& Matrix::mult(Matrix& A, Matrix& B, bool gpu) {
+	if (gpu)
+		return gpuMult(A, B);
+	return cpuMult(A, B);
+}
+
 inline Matrix& Matrix::mult(Matrix& A, Matrix& B) {
 #ifdef USEGPU
 	return gpuMult(A, B);
@@ -98,7 +106,6 @@ inline Matrix& Matrix::mult(Matrix& A, Matrix& B) {
 
 inline void Matrix::multIn(Matrix& A, Matrix& B, Matrix& saveIn) {
 #ifdef USEGPU
-
 	return gpuMultIn(A, B, saveIn);
 #else
 	return cpuMultIn(A, B, saveIn);
