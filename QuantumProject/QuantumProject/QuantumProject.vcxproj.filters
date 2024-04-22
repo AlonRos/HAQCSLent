@@ -27,9 +27,6 @@
     <ClInclude Include="CudaHeader.cuh">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="JumpArray.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Measurement.h">
       <Filter>Header Files</Filter>
     </ClInclude>

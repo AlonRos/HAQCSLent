@@ -16,3 +16,6 @@ __host__
 inline complex_t cudaComplexToComplex(cuDoubleComplex z) {
 	return complex_t(z.x, z.y);
 }
+
+__host__
+void init();

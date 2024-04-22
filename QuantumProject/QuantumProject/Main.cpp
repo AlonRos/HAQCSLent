@@ -9,26 +9,20 @@
 #ifdef USEGPU
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#include "CudaHeader.cuh"
 #endif
 
  
  using namespace std;
- 
- void init() {
-
-#ifdef USEGPU // the first function in the gpu takes more time
-	 Matrix2& m1 = Matrix2::randomMatrix(1024, 1024, 25);
-	 Matrix2& m2 = Matrix2::randomMatrix(1024, 1024, 25);
-	 m1 * m2;
-#endif
- }
 
 //#define DEBUG
 
  int main() {
+#ifdef USEGPU
 	 init();
+#endif
 
-	 int c = 1;
+	 int c = 10;
 
 	 int size = 1024;
 

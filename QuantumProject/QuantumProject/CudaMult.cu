@@ -28,60 +28,44 @@ __device__ GpuMatrix GetSubMatrix(GpuMatrix& A, int row, int col, int blockHeigh
 }
 
 __global__ void MatMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHeightA, int blockWidthAHeightB, int blockWidthB) {
-	// Block row and column
 	int blockRow = blockIdx.y;
 	int blockCol = blockIdx.x;
-	// Each thread block computes one sub-matrix Csub of C
-	GpuMatrix Csub = GetSubMatrix(C, blockRow, blockCol, blockHeightA, blockWidthB);
-	// Each thread computes one element of Csub
-	// by accumulating results into Cvalue
+
+	GpuMatrix subC = GetSubMatrix(C, blockRow, blockCol, blockHeightA, blockWidthB);
+
 	double Cvalue = 0;
-	// Thread row and column within Csub
+
 	int row = threadIdx.y;
 	int col = threadIdx.x;
 
-	// Loop over all the sub-matrices of A and B that are
-	// required to compute Csub
-	// Multiply each pair of sub-matrices together
-	// and accumulate the results
 	for (int i = 0; i < A.width / blockWidthAHeightB; ++i) {
-		// Get sub-matrix Asub of A
-		GpuMatrix Asub = GetSubMatrix(A, blockRow, i, blockHeightA, blockWidthAHeightB);
-		// Get sub-matrix Bsub of B
-		GpuMatrix Bsub = GetSubMatrix(B, i, blockCol, blockWidthAHeightB, blockWidthB);
-		// Shared memory used to store Asub and Bsub respectively
+		GpuMatrix subA = GetSubMatrix(A, blockRow, i, blockHeightA, blockWidthAHeightB);
+
+		GpuMatrix subB = GetSubMatrix(B, i, blockCol, blockWidthAHeightB, blockWidthB);
+
 		__shared__ double As[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
 		__shared__ double Bs[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
-		// Load Asub and Bsub from device memory to shared memory
-		// Each thread loads one element of each sub-matrix
 
-		if (row < Asub.height && col < Asub.width) {
-			As[row][col] = GetElement(Asub, row, col);
+		if (row < subA.height && col < subA.width) {
+			As[row][col] = GetElement(subA, row, col);
 		}
 
-		if (row < Bsub.height && col < Bsub.width) {
-			Bs[row][col] = GetElement(Bsub, row, col);
+		if (row < subB.height && col < subB.width) {
+			Bs[row][col] = GetElement(subB, row, col);
 		}
 
-		// Synchronize to make sure the sub-matrices are loaded
-		// before starting the computation
 		__syncthreads();
-		// Multiply Asub and Bsub together
 		
-		if (row < Csub.height && col < Csub.width) {
+		if (row < subC.height && col < subC.width) {
 			for (int j = 0; j < blockWidthAHeightB; ++j)
 				Cvalue += As[row][j] * Bs[j][col];
 		}
 
-		// Synchronize to make sure that the preceding
-		// computation is done before loading two new
-		// sub-matrices of A and B in the next iteration
 		__syncthreads();
 	}
-	// Write Csub to device memory
-	// Each thread writes one element
-	if (row < Csub.height && col < Csub.width) {
-		SetElement(Csub, row, col, Cvalue);
+
+	if (row < subC.height && col < subC.width) {
+		SetElement(subC, row, col, Cvalue);
 	}
 }
 
@@ -168,4 +152,11 @@ void Matrix2::gpuMultIn(Matrix2& A, Matrix2& B, Matrix2& res) {
             res.entry(i, j) = complex_t(realArealB[j + i * B.n] - imagAimagB[j + i * B.n], realAimagB[j + i * B.n] + imagArealB[j + i * B.n]);
 		}
 	}
+}
+
+__host__
+void init() {
+	int* x;
+	cudaMalloc(&x, sizeof(int));
+	cudaFree(x);
 }

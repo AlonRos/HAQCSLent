@@ -141,7 +141,6 @@
   <ItemGroup>
     <ClInclude Include="Gates.h" />
     <ClInclude Include="CudaHeader.cuh" />
-    <ClInclude Include="JumpArray.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix2.h" />
     <ClInclude Include="Measurement.h" />
