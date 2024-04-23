@@ -42,6 +42,8 @@ public:
 
 	~Matrix2();
 
+	inline static Matrix2& mult(Matrix2& A, Matrix2& B, bool gpu);
+
 	inline static Matrix2& mult(Matrix2& A, Matrix2& B);
 
 	inline static void multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
@@ -97,6 +99,17 @@ inline Matrix2& Matrix2::operator+(Matrix2& other) {
 }
 
 
+inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B, bool gpu) {
+#ifdef USEGPU
+	if (gpu) {
+		return gpuMult(A, B);
+	}
+	return cpuMult(A, B);
+#else
+	return cpuMult(A, B);
+#endif
+
+}
 // multiply
 
 inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {

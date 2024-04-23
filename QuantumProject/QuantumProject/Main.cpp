@@ -12,54 +12,63 @@
 #include "CudaHeader.cuh"
 #endif
 
- 
- using namespace std;
+
+using namespace std;
 
 //#define DEBUG
 
- int main() {
+int main() {
 #ifdef USEGPU
-	 init();
+	init();
 #endif
 
-	 int c = 10;
+	int c = 10;
 
-	 int size = 1024;
+	int size = 1024;
 
-	 int duration = 0;
-	 for (int i = 0; i < c; ++i) {
-		 Matrix2& m1 = Matrix2::randomMatrix(size, size, 25);
+	for (int N = 1; N < 1000; ++N) {
 
-#ifdef DEBUG
-		 m1.print();
-		 cout << "\n";
-#endif
+		int durationC = 0, durationG = 0;
+		for (int i = 0; i < c; ++i) {
+			Matrix2& m1 = Matrix2::randomMatrix(N, N, 25);
 
-		 Matrix2& m2 = Matrix2::randomMatrix(size, size, 25);
+			Matrix2& m2 = Matrix2::randomMatrix(N, N, 25);
 
-#ifdef DEBUG
-		 m2.print();
-		 cout << "\n";
-#endif
+			auto start = chrono::high_resolution_clock::now();
 
+			Matrix2& m = Matrix2::mult(m1, m2, false);
 
-		 auto start = chrono::high_resolution_clock::now();
+			auto stop = chrono::high_resolution_clock::now();
+			durationC += duration_cast<chrono::microseconds>(stop - start).count();
 
-		 Matrix2& m = m1 * m2;
+			delete& m1;
+			delete& m2;
+			delete& m;
+		}
 
-		 auto stop = chrono::high_resolution_clock::now();
-		 duration += duration_cast<chrono::milliseconds>(stop - start).count();
+		for (int i = 0; i < c; ++i) {
+			Matrix2& m1 = Matrix2::randomMatrix(N, N, 25);
 
-#ifdef DEBUG
-		 m.print();
-		 cout << "\n";
-		 cout << "\n";
-#endif
-		 delete &m1;
-		 delete &m2;
-		 delete &m;
+			Matrix2& m2 = Matrix2::randomMatrix(N, N, 25);
 
-	 }
+			auto start = chrono::high_resolution_clock::now();
 
-	 cout << duration / c;
+			Matrix2& m = Matrix2::mult(m1, m2, true);
+
+			auto stop = chrono::high_resolution_clock::now();
+			durationG += duration_cast<chrono::microseconds>(stop - start).count();
+
+			delete& m1;
+			delete& m2;
+			delete& m;
+		}
+
+		if (durationC < durationG) {
+			cout << "c " << N << " " << durationC << " " << durationG << '\n';
+		}
+		else {
+			cout << "g " << N << " " << durationC << " " << durationG << '\n';
+
+		}
+	}
 }
