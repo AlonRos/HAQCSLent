@@ -42,8 +42,6 @@ public:
 
 	~Matrix2();
 
-	inline static Matrix2& mult(Matrix2& A, Matrix2& B, bool gpu);
-
 	inline static Matrix2& mult(Matrix2& A, Matrix2& B);
 
 	inline static void multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
@@ -99,22 +97,11 @@ inline Matrix2& Matrix2::operator+(Matrix2& other) {
 }
 
 
-inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B, bool gpu) {
-#ifdef USEGPU
-	if (gpu) {
-		return gpuMult(A, B);
-	}
-	return cpuMult(A, B);
-#else
-	return cpuMult(A, B);
-#endif
-
-}
 // multiply
 
 inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 #ifdef USEGPU
-	if ((long long) A.m * A.n * B.m * B.n > 421875000) {
+	if ((long long)A.m * A.n * B.n > 729000) {
 		return gpuMult(A, B);
 	}
 	return cpuMult(A, B);
@@ -126,7 +113,7 @@ inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 
 inline void Matrix2::multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 #ifdef USEGPU
-	if ((long long) A.m * A.n * B.m * B.n > 421875000) {
+	if ((long long)A.m * A.n * B.n > 729000) {
 		return gpuMultIn(A, B, saveIn);
 	}
 	return cpuMultIn(A, B, saveIn);
