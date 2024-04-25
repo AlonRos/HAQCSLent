@@ -10,14 +10,14 @@ typedef struct {
 
 } GpuMatrix;
 
-__device__ double GetElement(GpuMatrix& A, int row, int col) {
+__device__ double getElement(GpuMatrix& A, int row, int col) {
 	return A.elements[row * A.stride + col];
 }
-__device__ void SetElement(GpuMatrix& A, int row, int col, double value) {
+__device__ void setElement(GpuMatrix& A, int row, int col, double value) {
 	A.elements[row * A.stride + col] = value;
 }
 
-__device__ GpuMatrix GetSubMatrix(GpuMatrix& A, int row, int col, int blockHeightA, int blockWidthA)
+__device__ GpuMatrix getSubMatrix(GpuMatrix& A, int row, int col, int blockHeightA, int blockWidthA)
 {
 	GpuMatrix Asub;
 	Asub.width = blockWidthA;
@@ -27,11 +27,11 @@ __device__ GpuMatrix GetSubMatrix(GpuMatrix& A, int row, int col, int blockHeigh
 	return Asub;
 }
 
-__global__ void MatMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHeightA, int blockWidthAHeightB, int blockWidthB) {
+__global__ void matMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHeightA, int blockWidthAHeightB, int blockWidthB) {
 	int blockRow = blockIdx.y;
 	int blockCol = blockIdx.x;
 
-	GpuMatrix subC = GetSubMatrix(C, blockRow, blockCol, blockHeightA, blockWidthB);
+	GpuMatrix subC = getSubMatrix(C, blockRow, blockCol, blockHeightA, blockWidthB);
 
 	double Cvalue = 0;
 
@@ -39,19 +39,19 @@ __global__ void MatMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHei
 	int col = threadIdx.x;
 
 	for (int i = 0; i < A.width / blockWidthAHeightB; ++i) {
-		GpuMatrix subA = GetSubMatrix(A, blockRow, i, blockHeightA, blockWidthAHeightB);
+		GpuMatrix subA = getSubMatrix(A, blockRow, i, blockHeightA, blockWidthAHeightB);
 
-		GpuMatrix subB = GetSubMatrix(B, i, blockCol, blockWidthAHeightB, blockWidthB);
+		GpuMatrix subB = getSubMatrix(B, i, blockCol, blockWidthAHeightB, blockWidthB);
 
 		__shared__ double As[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
 		__shared__ double Bs[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
 
 		if (row < subA.height && col < subA.width) {
-			As[row][col] = GetElement(subA, row, col);
+			As[row][col] = getElement(subA, row, col);
 		}
 
 		if (row < subB.height && col < subB.width) {
-			Bs[row][col] = GetElement(subB, row, col);
+			Bs[row][col] = getElement(subB, row, col);
 		}
 
 		__syncthreads();
@@ -65,7 +65,7 @@ __global__ void MatMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHei
 	}
 
 	if (row < subC.height && col < subC.width) {
-		SetElement(subC, row, col, Cvalue);
+		setElement(subC, row, col, Cvalue);
 	}
 }
 
@@ -101,7 +101,7 @@ double* gpuMultDouble(double* A, int Am, int An, double* B, int Bn) {
 
     dim3 dimGrid(ceil((double)dev_B.width / dimBlock.x), ceil((double)dev_A.height / dimBlock.y));
 
-    MatMulKernel << <dimGrid, dimBlock >> > (dev_A, dev_B, dev_res, blockHeightA, blockWidthAHeightB, blockWidthB);
+    matMulKernel << <dimGrid, dimBlock >> > (dev_A, dev_B, dev_res, blockHeightA, blockWidthAHeightB, blockWidthB);
 
     double* res = (double*)malloc(size);
 
