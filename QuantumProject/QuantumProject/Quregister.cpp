@@ -1,6 +1,9 @@
 #include "Quregister.h"
 #include "Measurement.h"
 
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 Quregister::Quregister(int length, int num) : length(length) {
 	coordsLength = 1 << length;
 	coords = new Matrix2(coordsLength, 1);
@@ -109,4 +112,27 @@ int Quregister::regMeasure(vector<Quregister> basis) {
 
 int Quregister::regMeasureComputational() {
 	return measureComputational(*this);
+}
+
+complex_t rootOfUnityPower(int order, int power) {
+	double angle = 2 * M_PI / order * (power % order);
+	return complex_t(cos(angle), sin(angle));
+}
+
+Quregister& Quregister::QFT(Quregister& reg) {
+	Quregister* retReg = new Quregister(reg.length, 0);
+
+	complex_t sum = 0;
+
+	for (int k = 0; k < reg.coordsLength; ++k) {
+		sum = 0;
+
+		for (int n = 0; n < reg.coordsLength; ++n) {
+			sum += reg.getCoords()->entry(n, 0) * rootOfUnityPower(reg.coordsLength, n * k);
+		}
+
+		retReg->getCoords()->entry(k, 0) = 1 / sqrt(reg.coordsLength) * sum;
+	}
+
+	return *retReg;
 }

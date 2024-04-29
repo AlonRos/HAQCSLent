@@ -39,12 +39,7 @@ public:
 
 	Matrix2*& getCoords();
 
+	static Quregister& QFT(Quregister& reg);
 };
-
-
-
-
-
-
 
 #endif

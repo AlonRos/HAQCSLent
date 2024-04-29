@@ -17,8 +17,11 @@
 using namespace std;
 
 int main() {
-	int num = 1;
+	int num = 3;
+	int length = 13;
 
-	cout << findNum(U(num));
+	Quregister reg(length, num);
+
+	Quregister::QFT(reg).getCoords();
 
 }
