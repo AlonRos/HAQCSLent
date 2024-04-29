@@ -7,11 +7,11 @@
 
 typedef std::complex<double> complex_t;
 
-#define USEGPU
+//#define USEGPU
 
 class Matrix2 { // m * n Matrix
 private:
-	bool rowwise;
+	bool rowwise, toFree = true;
 	int jump;
 
 	static inline Matrix2& gpuMult(Matrix2& A, Matrix2& B);
@@ -23,6 +23,11 @@ private:
 	static Matrix2& cpuAdd(Matrix2& A, Matrix2& B);
 	static void cpuAddIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 	static void gpuAddIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
+
+	static Matrix2& gpuKronecker(Matrix2& A, Matrix2& B);
+	static Matrix2& cpuKronecker(Matrix2& A, Matrix2& B);
+	static void cpuKroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
+	static void gpuKroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
 public:
 	int m, n;
@@ -50,6 +55,10 @@ public:
 
 	inline static void addIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
+	inline static Matrix2& kronecker(Matrix2& A, Matrix2& B);
+
+	inline static void kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
+
 	Matrix2& operator*(Matrix2& other);
 
 	Matrix2& operator+(Matrix2& other);
@@ -57,6 +66,8 @@ public:
 	Matrix2& operator*(complex_t scalar);
 
 	complex_t& entry(int rowIndex, int colIndex);
+
+	void zero();
 
 	// Return a matrix containing the rows i to j (including i, not including j). The elements are in the same address as this's elements.
 	Matrix2& rows(int i, int j);
@@ -171,6 +182,41 @@ inline Matrix2& Matrix2::gpuAdd(Matrix2& A, Matrix2& B) {
 	Matrix2* returnMatrix = new Matrix2(A.m, B.n);
 
 	gpuAddIn(A, B, *returnMatrix);
+
+	return *returnMatrix;
+}
+
+
+// kronecker
+
+inline Matrix2& Matrix2::kronecker(Matrix2& A, Matrix2& B) {
+#ifdef USEGPU
+	return gpuKronecker(A, B);
+#else
+	return cpuKronecker(A, B);
+#endif
+}
+
+inline void Matrix2::kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
+#ifdef USEGPU
+	return gpuKroneckerIn(A, B, saveIn);
+#else
+	return cpuKroneckerIn(A, B, saveIn);
+#endif
+}
+
+inline Matrix2& Matrix2::cpuKronecker(Matrix2& A, Matrix2& B) {
+	Matrix2* returnMatrix = new Matrix2(A.m * B.m, A.n * B.n);
+
+	cpuKroneckerIn(A, B, *returnMatrix);
+
+	return *returnMatrix;
+}
+
+inline Matrix2& Matrix2::gpuKronecker(Matrix2& A, Matrix2& B) {
+	Matrix2* returnMatrix = new Matrix2(A.m * B.m, A.n * B.n);
+
+	gpuKroneckerIn(A, B, *returnMatrix);
 
 	return *returnMatrix;
 }
