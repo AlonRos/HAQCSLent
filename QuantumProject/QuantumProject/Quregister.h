@@ -17,11 +17,17 @@ private:
 
 public:
 	Quregister(int length, int num);
-
-	// Pass the qubits from i to j ([i,j)) through the gate
-	void applyGate(int i, int j, Matrix2& gate);
 	
 	void applyGate(Matrix2& gate);
+
+	// passing qubit in index i (from right)
+	void applyGateOnQubit(Matrix2& gate, int i);
+
+	// passing qubits from index i to index j (not including j)
+	void applyGates(Matrix2* gates, int i, int j);
+
+	// passing qubits from index i to index j (not including j)
+	void applyGateOnQubits(Matrix2& gate, int i, int j);
 
 	int regMeasure(vector<Quregister> basis);
 
