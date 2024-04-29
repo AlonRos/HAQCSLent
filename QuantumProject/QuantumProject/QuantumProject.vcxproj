@@ -144,6 +144,7 @@
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix2.h" />
     <ClInclude Include="Measurement.h" />
+    <ClInclude Include="NegatingXFunction.h" />
     <ClInclude Include="Quregister.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
@@ -153,6 +154,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix2.cpp" />
     <ClCompile Include="Measurement.cpp" />
+    <ClCompile Include="NegatingXFunction.cpp" />
     <ClCompile Include="Quregister.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
