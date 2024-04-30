@@ -99,7 +99,7 @@ double* gpuMultDouble(double* A, int Am, int An, double* B, int Bn) {
 
 	dim3 dimBlock(max(blockWidthAHeightB, blockWidthB), max(blockHeightA, blockWidthAHeightB));
 
-    dim3 dimGrid(ceil((double)dev_B.width / dimBlock.x), ceil((double)dev_A.height / dimBlock.y));
+    dim3 dimGrid((int)ceil((double)dev_B.width / dimBlock.x), (int)ceil((double)dev_A.height / dimBlock.y));
 
     matMulKernel << <dimGrid, dimBlock >> > (dev_A, dev_B, dev_res, blockHeightA, blockWidthAHeightB, blockWidthB);
 

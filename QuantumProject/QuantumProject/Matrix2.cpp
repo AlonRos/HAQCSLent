@@ -24,6 +24,7 @@ Matrix2::Matrix2(int m, int n, complex_t* arr) : m(m), n(n), rowwise(true), jump
 Matrix2::~Matrix2() {
 	if (toFree) {
 		free(elements);
+		elements = NULL;
 	}
 }
 

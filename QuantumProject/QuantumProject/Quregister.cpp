@@ -18,27 +18,28 @@ void Quregister::applyGateOnQubit(Matrix2& gate, int index) {
 	applyGateOnQubits(gate, index, index + 1);
 }
 
-void Quregister::applyGates(Matrix2* gates, int i, int j) {
-	Matrix2& newCoords = *new Matrix2(coordsLength, 1);
+void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
+	Matrix2* newCoords = new Matrix2(coordsLength, 1);
 
-	Matrix2* coordsArr[2] = { coords, &newCoords };
-
-
-	int amountGates = j - i;
-	Matrix2* currentCoords = &newCoords, *nextCoords = coords;
+	Matrix2* coordsArr[2] = { coords, newCoords };
 
 
-	for (int index = i; index < j; ++index) {
-		currentCoords = coordsArr[(index - i) % 2];
-		nextCoords = coordsArr[(index - i + 1) % 2];
+	int amountGates = endIndex - beginIndex;
+	Matrix2* currentCoords = newCoords, *nextCoords = coords;
+
+
+	for (int index = beginIndex; index < endIndex; ++index) {
+		currentCoords = coordsArr[(index - beginIndex) % 2];
+		nextCoords = coordsArr[(index - beginIndex + 1) % 2];
 		nextCoords->zero();
 
-		Matrix2& gate = gates[index - i];
+		Matrix2& gate = gates[index - beginIndex];
 
 		Matrix2* cols[2] = { &gate.col(0), &gate.col(1) };
 		Matrix2* col;
 
-		for (int i = 0; i < coordsLength; ++i) {
+		// apply gate on one qubit
+		for (int i = 0; i < coordsLength; ++i) { 
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
 				int qb = (i >> index) & 1;
 
@@ -51,29 +52,30 @@ void Quregister::applyGates(Matrix2* gates, int i, int j) {
 
 	}
 
-	if (currentCoords == &newCoords) {
+	if (currentCoords == newCoords) {
 		free(currentCoords);
 	}
 
 	coords = nextCoords;
 }
 
-void Quregister::applyGateOnQubits(Matrix2& gate, int i, int j) {
-	Matrix2& newCoords = *new Matrix2(coordsLength, 1);
+void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) {
+	Matrix2* newCoords = new Matrix2(coordsLength, 1);
 
-	Matrix2* coordsArr[2] = { coords, &newCoords };
+	Matrix2* coordsArr[2] = { coords, newCoords };
 
-	Matrix2* currentCoords = &newCoords, * nextCoords = coords;
+	Matrix2* currentCoords = newCoords, * nextCoords = coords;
 
 
-	for (int index = i; index < j; ++index) {
-		currentCoords = coordsArr[(index - i) % 2];
-		nextCoords = coordsArr[(index - i + 1) % 2];
+	for (int index = beginIndex; index < endIndex; ++index) {
+		currentCoords = coordsArr[(index - beginIndex) % 2];
+		nextCoords = coordsArr[(index - beginIndex + 1) % 2];
 		nextCoords->zero();
 
 		Matrix2* cols[2] = { &gate.col(0), &gate.col(1) };
 		Matrix2* col;
 
+		// apply gate on one qubit
 		for (int i = 0; i < coordsLength; ++i) {
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
 				int qb = (i >> index) & 1;
@@ -87,7 +89,7 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int i, int j) {
 
 	}
 
-	if (currentCoords == &newCoords) {
+	if (currentCoords == newCoords) {
 		free(currentCoords);
 	}
 
@@ -110,8 +112,16 @@ int Quregister::regMeasure(vector<Quregister> basis) {
 	return measure(*this, basis);
 }
 
+int Quregister::regMeasureInSubSpaces(vector<vector<Quregister>> bases) {
+	return measureInSubSpaces(*this, bases);
+}
+
 int Quregister::regMeasureComputational() {
 	return measureComputational(*this);
+}
+
+int Quregister::regMeasureComputational(int i, int j) {
+	return measureComputational(*this, i, j);
 }
 
 complex_t rootOfUnityPower(int order, int power) {
