@@ -20,13 +20,16 @@ using namespace std;
 //#define DEBUG
 
 int main() {
-	int n = 12;
+	int n = 10;
 
 	int size = 1 << n;
 
 	int* f = generateBalancedFunction(size);
 
+	//int* f = generateConstantFunction(size, 1);
+
 	Matrix2& Uf = createMatrixFromFunction(f, 2 * size);
+
 	free(f);
 
 	cout << boolalpha << isBalanced(n, Uf);

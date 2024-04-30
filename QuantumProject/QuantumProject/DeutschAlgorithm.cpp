@@ -1,5 +1,6 @@
 #include "DeutschAlgorithm.h"
 #include "Gates.h"
+#include <iostream>
 
 int* generateBalancedFunction(int size) {
 	 int* f = new int[size]();
@@ -16,6 +17,18 @@ int* generateBalancedFunction(int size) {
 
 	 return f;
 }
+
+int* generateConstantFunction(int size, int value) {
+	if (value == 0) {
+		return new int[size]();
+	}
+	else {
+		int* f = new int[size];
+		std::fill(f, f + size, 1);
+		return f;
+	}
+}
+
 
 Matrix2& createMatrixFromFunction(int* f, int matSize) {
 	Matrix2& Uf = *new Matrix2(matSize, matSize);
