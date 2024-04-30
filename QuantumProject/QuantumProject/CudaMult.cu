@@ -5,16 +5,16 @@
 typedef struct {
 	int width;
 	int height;
-	int stride;
+	int jump;
 	double* elements;
 
 } GpuMatrix;
 
 __device__ double getElement(GpuMatrix& A, int row, int col) {
-	return A.elements[row * A.stride + col];
+	return A.elements[row * A.jump + col];
 }
 __device__ void setElement(GpuMatrix& A, int row, int col, double value) {
-	A.elements[row * A.stride + col] = value;
+	A.elements[row * A.jump + col] = value;
 }
 
 __device__ GpuMatrix getSubMatrix(GpuMatrix& A, int row, int col, int blockHeightA, int blockWidthA)
@@ -22,8 +22,8 @@ __device__ GpuMatrix getSubMatrix(GpuMatrix& A, int row, int col, int blockHeigh
 	GpuMatrix Asub;
 	Asub.width = blockWidthA;
 	Asub.height = blockHeightA;
-	Asub.stride = A.stride;
-	Asub.elements = &A.elements[A.stride * blockHeightA * row + blockWidthA * col];
+	Asub.jump = A.jump;
+	Asub.elements = &A.elements[A.jump * blockHeightA * row + blockWidthA * col];
 	return Asub;
 }
 
@@ -74,20 +74,20 @@ double* gpuMultDouble(double* A, int Am, int An, double* B, int Bn) {
     GpuMatrix dev_A, dev_B, dev_res;
     int Bm = An, resm = Am, resn = Bn;
 
-    dev_A.width = dev_A.stride = An;
+    dev_A.width = dev_A.jump = An;
     dev_A.height = Am;
     size_t size = dev_A.width * dev_A.height * sizeof(double);
     cudaMalloc(&dev_A.elements, size);
     cudaMemcpy(dev_A.elements, A, size, cudaMemcpyHostToDevice);
 
-    dev_B.width = dev_B.stride = Bn;
+    dev_B.width = dev_B.jump = Bn;
     dev_B.height = Bm;
     size = dev_B.width * dev_B.height * sizeof(double);
     cudaMalloc(&dev_B.elements, size);
     cudaMemcpy(dev_B.elements, B, size, cudaMemcpyHostToDevice);
 
 
-    dev_res.width = dev_res.stride = resn;
+    dev_res.width = dev_res.jump = resn;
     dev_res.height = resm;
     size = dev_res.width * dev_res.height * sizeof(double);
     cudaMalloc(&dev_res.elements, size);
