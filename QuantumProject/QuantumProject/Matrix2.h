@@ -7,7 +7,7 @@
 
 typedef std::complex<double> complex_t;
 
-//#define USEGPU
+#define USEGPU
 
 class Matrix2 { // m * n Matrix
 private:

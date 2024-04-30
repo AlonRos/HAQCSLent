@@ -38,13 +38,13 @@ __global__ void matMulKernel(GpuMatrix A, GpuMatrix B, GpuMatrix C, int blockHei
 	int row = threadIdx.y;
 	int col = threadIdx.x;
 
+	__shared__ double As[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
+	__shared__ double Bs[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
+
 	for (int i = 0; i < A.width / blockWidthAHeightB; ++i) {
 		GpuMatrix subA = getSubMatrix(A, blockRow, i, blockHeightA, blockWidthAHeightB);
 
 		GpuMatrix subB = getSubMatrix(B, i, blockCol, blockWidthAHeightB, blockWidthB);
-
-		__shared__ double As[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
-		__shared__ double Bs[MAX_BLOCK_SIZE][MAX_BLOCK_SIZE];
 
 		if (row < subA.height && col < subA.width) {
 			As[row][col] = getElement(subA, row, col);
@@ -146,12 +146,23 @@ void Matrix2::gpuMultIn(Matrix2& A, Matrix2& B, Matrix2& res) {
 
     double* realAimagB = gpuMultDouble(realA, A.m, A.n, imagB, B.n);
     double* imagArealB = gpuMultDouble(imagA, A.m, A.n, realB, B.n);
+
+	free(realA);
+	free(imagA);
+	free(realB);
+	free(imagB);
+
     
 	for (int i = 0; i < A.m; ++i) {
 		for (int j = 0; j < B.n; ++j) {
             res.entry(i, j) = complex_t(realArealB[j + i * B.n] - imagAimagB[j + i * B.n], realAimagB[j + i * B.n] + imagArealB[j + i * B.n]);
 		}
 	}
+
+	free(realArealB);
+	free(imagAimagB);
+	free(realAimagB);
+	free(imagArealB);
 }
 
 __host__

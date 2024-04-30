@@ -13,49 +13,24 @@
 #endif
 
 #include "NegatingXFunction.h"
+#include "DeutschAlgorithm.h"
 
 using namespace std;
 
+//#define DEBUG
+
 int main() {
-	int n = 5;
+	int n = 12;
 
-	Quregister q(n + 1, 1);
+	int size = 1 << n;
 
-	int coordsLength = q.getCoordsLength(), regLength = n + 1;
+	int* f = generateBalancedFunction(size);
 
-	q.applyGateOnQubits(hadamard, 0, regLength);
+	Matrix2& Uf = createMatrixFromFunction(f, 2 * size);
+	free(f);
 
-	Matrix2& Uf = *new Matrix2(coordsLength, coordsLength);
+	cout << boolalpha << isBalanced(n, Uf);
 
-	int* f = new int[1 << n];
-
-	for (int i = 0; i < coordsLength / 8; ++i) {
-		f[i] = 1;
-	}
-
-	for (int i = coordsLength / 8; i < coordsLength / 4; ++i) {
-		f[i] = 0;
-
-	}
-
-	for (int i = coordsLength / 4; i < 3 * coordsLength / 8; ++i) {
-		f[i] = 0;
-
-	}
-
-	for (int i = 3 * coordsLength / 8; i < coordsLength / 2; ++i) {
-		f[i] = 1;
-	}
-
-	for (int i = 0; i < coordsLength / 2; ++i) {
-		Uf.entry(2 * i, (i << 1) | f[i]) = 1;
-		Uf.entry(2 * i + 1, (i << 1) | (1 - f[i])) = 1;
-	}
-
-	q.applyGate(Uf);
-
-	q.applyGateOnQubits(hadamard, 1, regLength);
-
-	cout << q.regMeasureComputational(1, regLength);
+	delete& Uf;
 
 }

@@ -65,6 +65,12 @@
     <ClCompile Include="NegatingXFunction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DeutschAlgorithm.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeutschAlgorithm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="CudaMult.cu">

@@ -149,6 +149,8 @@
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DeutschAlgorithm.cpp" />
+    <ClCompile Include="DeutschAlgorithm.h" />
     <ClCompile Include="Gates.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />

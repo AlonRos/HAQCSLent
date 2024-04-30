@@ -18,5 +18,9 @@ int findNum(Matrix2& Ux) {
 
 	q.applyGateOnQubits(hadamard, 0, 2);
 
-	return q.regMeasureComputational();
+	int num = q.regMeasureComputational();
+
+	delete q.getCoords();
+
+	return num;
 }
