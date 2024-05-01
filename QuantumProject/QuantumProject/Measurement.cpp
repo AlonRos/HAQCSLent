@@ -124,28 +124,19 @@ int measureComputational(Quregister& reg, int beginIndex, int endIndex) {
 	}
 
 	int chosenSpaceIndex = randomIndexProbs(probs, amountSpaces);
+	double normOfProjection = sqrt(probs[chosenSpaceIndex]);
 	delete[] probs;
 
-	vector<pair<int, complex_t>> valuesStay;
+	Matrix2* newCoords = new Matrix2(coordsLength, 1);
 
 	for (int indexInSpace = 0; indexInSpace < amountInSpace; ++indexInSpace) {
 		int indexInComputational = (indexInSpace & ~((1 << beginIndex) - 1)) | (chosenSpaceIndex << beginIndex) | (indexInSpace & ((1 << beginIndex) - 1));
-		valuesStay.push_back({ indexInComputational, reg.getCoords()->entry(indexInComputational, 0) });
+		newCoords->entry(indexInComputational, 0) = reg.getCoords()->entry(indexInComputational, 0) / normOfProjection;
 	}
-
-	double normOfProjection = 0;
-	for (int i = 0; i < amountInSpace; ++i) {
-		normOfProjection += complexNormSquared(valuesStay[i].second);
-	}
-	normOfProjection = sqrt(normOfProjection);
 
 	free(reg.getCoords());
 
-	reg.getCoords() = new Matrix2(coordsLength, 1);
-
-	for (int i = 0; i < amountInSpace; ++i) {
-		reg.getCoords()->entry(valuesStay[i].first, 0) = valuesStay[i].second / normOfProjection;
-	}
+	reg.getCoords() = newCoords;
 
 	return chosenSpaceIndex;
 }

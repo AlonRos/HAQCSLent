@@ -17,8 +17,6 @@
 
 using namespace std;
 
-//#define DEBUG
-
 int main() {
 	int n = 10;
 
