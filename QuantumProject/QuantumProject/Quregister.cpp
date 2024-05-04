@@ -23,10 +23,9 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 
 	Matrix2* coordsArr[2] = { coords, newCoords };
 
-
-	int amountGates = endIndex - beginIndex;
 	Matrix2* currentCoords = newCoords, *nextCoords = coords;
 
+	int amountGates = endIndex - beginIndex;
 
 	for (int index = beginIndex; index < endIndex; ++index) {
 		currentCoords = coordsArr[(index - beginIndex) % 2];
@@ -58,6 +57,48 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 
 	coords = nextCoords;
 }
+
+void Quregister::applyGates(vector<pair<Matrix2, int>> gatesIndices) {
+	Matrix2* newCoords = new Matrix2(coordsLength, 1);
+
+	Matrix2* coordsArr[2] = { coords, newCoords };
+
+	Matrix2* currentCoords = newCoords, * nextCoords = coords;
+
+	int amountGates = gatesIndices.size();
+
+	for (int i = 0; i < amountGates; ++i) {
+		currentCoords = coordsArr[i % 2];
+		nextCoords = coordsArr[(i + 1) % 2];
+		nextCoords->zero();
+
+		Matrix2& gate = gatesIndices[i].first;
+		int index = gatesIndices[i].second;
+
+		Matrix2* cols[2] = { &gate.col(0), &gate.col(1) };
+		Matrix2* col;
+
+		// apply gate on one qubit
+		for (int i = 0; i < coordsLength; ++i) {
+			if (currentCoords->entry(i, 0) != (complex_t)0) {
+				int qb = (i >> index) & 1;
+
+				col = cols[qb];
+
+				nextCoords->entry(i, 0) += currentCoords->entry(i, 0) * col->entry(qb, 0);
+				nextCoords->entry(i ^ (1 << index), 0) += currentCoords->entry(i, 0) * col->entry(1 - qb, 0);
+			}
+		}
+
+	}
+
+	if (currentCoords == newCoords) {
+		free(currentCoords);
+	}
+
+	coords = nextCoords;
+}
+
 
 void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) {
 	Matrix2* newCoords = new Matrix2(coordsLength, 1);
