@@ -151,7 +151,7 @@ void Matrix2::cpuMultIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 	}
 }
 
-void Matrix2::cpuKroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
+void Matrix2::kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 	for (int i = 0; i < A.m; ++i) {
 		for (int j = 0; j < A.n; ++j) {
 			for (int k = 0; k < B.m; ++k) {

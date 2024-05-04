@@ -7,7 +7,7 @@
 
 typedef std::complex<double> complex_t;
 
-#define USEGPU
+//#define USEGPU
 
 class Matrix2 { // m * n Matrix
 private:
@@ -23,11 +23,6 @@ private:
 	static Matrix2& cpuAdd(Matrix2& A, Matrix2& B);
 	static void cpuAddIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 	static void gpuAddIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
-
-	static Matrix2& gpuKronecker(Matrix2& A, Matrix2& B);
-	static Matrix2& cpuKronecker(Matrix2& A, Matrix2& B);
-	static void cpuKroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
-	static void gpuKroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
 public:
 	int m, n;
@@ -57,7 +52,7 @@ public:
 
 	inline static Matrix2& kronecker(Matrix2& A, Matrix2& B);
 
-	inline static void kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
+	static void kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
 	Matrix2& operator*(Matrix2& other);
 
@@ -190,35 +185,13 @@ inline Matrix2& Matrix2::gpuAdd(Matrix2& A, Matrix2& B) {
 // kronecker
 
 inline Matrix2& Matrix2::kronecker(Matrix2& A, Matrix2& B) {
-#ifdef USEGPU
-	return gpuKronecker(A, B);
-#else
-	return cpuKronecker(A, B);
-#endif
-}
-
-inline void Matrix2::kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
-#ifdef USEGPU
-	return gpuKroneckerIn(A, B, saveIn);
-#else
-	return cpuKroneckerIn(A, B, saveIn);
-#endif
-}
-
-inline Matrix2& Matrix2::cpuKronecker(Matrix2& A, Matrix2& B) {
 	Matrix2* returnMatrix = new Matrix2(A.m * B.m, A.n * B.n);
 
-	cpuKroneckerIn(A, B, *returnMatrix);
+	kroneckerIn(A, B, *returnMatrix);
 
 	return *returnMatrix;
 }
 
-inline Matrix2& Matrix2::gpuKronecker(Matrix2& A, Matrix2& B) {
-	Matrix2* returnMatrix = new Matrix2(A.m * B.m, A.n * B.n);
 
-	gpuKroneckerIn(A, B, *returnMatrix);
-
-	return *returnMatrix;
-}
 
 #endif

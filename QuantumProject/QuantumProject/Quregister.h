@@ -16,6 +16,7 @@ private:
 	
 
 public:
+	// Initializing a Quantum Register to the value |num >
 	Quregister(int length, int num);
 	
 	// apply gate to the whole register
