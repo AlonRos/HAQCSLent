@@ -19,3 +19,12 @@ static complex_t CNOTArr[4][4] = {
 	{ 0, 0, 1, 0 }
 };
 Matrix2& CNOT = *new Matrix2(4, 4, (complex_t*)CNOTArr, true, 4);
+
+Matrix2& phaseShift(double phi) {
+	complex_t phaseShiftArr[2][2] = {
+		{ 1, 0},
+		{ 0, complex_t(cos(phi), sin(phi))}
+	};
+
+	return *new Matrix2(2, 2, (complex_t*)phaseShiftArr);
+}

@@ -7,5 +7,6 @@ extern Matrix2& bitFlip;
 extern Matrix2& hadamard;
 extern Matrix2& CNOT;
 
+Matrix2& phaseShift(double phi);
 
 #endif
