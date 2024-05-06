@@ -33,6 +33,8 @@ public:
 	// passing qubits from index i to index j (not including j) into the same gate
 	void applyGateOnQubits(Matrix2& gate, int i, int j);
 
+	void applyGateOnSubReg(Matrix2& gate, int i, int j);
+
 	int regMeasure(vector<Quregister> basis);
 
 	int regMeasureInSubSpaces(vector<vector<Quregister>> bases);

@@ -18,5 +18,4 @@ double rand01();
 // Gives a random integer number in [0, bound)
 int randBound(int bound);
 
-
 #endif

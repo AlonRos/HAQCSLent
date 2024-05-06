@@ -18,20 +18,8 @@
 using namespace std;
 
 int main() {
-	int n = 10;
+	Quregister q(10, 0);
+	q.applyGateOnSubReg(Matrix2::kronecker(hadamard, hadamard), 1, 3);
 
-	int size = 1 << n;
-
-	int* f = generateBalancedFunction(size);
-
-	//int* f = generateConstantFunction(size, 1);
-
-	Matrix2& Uf = createMatrixFromFunction(f, 2 * size);
-
-	free(f);
-
-	cout << boolalpha << isBalanced(n, Uf);
-
-	delete& Uf;
-
+	q.getCoords()->print();
 }

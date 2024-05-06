@@ -29,19 +29,6 @@ int* generateConstantFunction(int size, int value) {
 	}
 }
 
-
-Matrix2& createMatrixFromFunction(int* f, int matSize) {
-	Matrix2& Uf = *new Matrix2(matSize, matSize);
-
-	int amount = matSize / 2;
-	for (int i = 0; i < amount; ++i) {
-		Uf.entry(2 * i, (i << 1) | f[i]) = 1;
-		Uf.entry(2 * i + 1, (i << 1) | (1 - f[i])) = 1;
-	}
-
-	return Uf;
-}
-
 bool isBalanced(int n, Matrix2& Uf) {
 	int regLength = n + 1;
 

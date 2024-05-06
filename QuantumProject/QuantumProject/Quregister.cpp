@@ -116,7 +116,7 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) 
 		Matrix2* cols[2] = { &gate.col(0), &gate.col(1) };
 		Matrix2* col;
 
-		// apply gate on one qubit
+		// apply gate on one qubit (wokring on | i >)
 		for (int i = 0; i < coordsLength; ++i) {
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
 				int qb = (i >> index) & 1;
@@ -135,6 +135,31 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) 
 	}
 
 	coords = nextCoords;
+}
+
+void Quregister::applyGateOnSubReg(Matrix2& gate, int beginIndex, int endIndex) {
+	Matrix2* newCoords = new Matrix2(coordsLength, 1);
+	
+	// wokring on | i > 
+	Matrix2* col;
+	int subRegVal, newIndex;
+
+	for (int i = 0; i < coordsLength; ++i) {
+		if (coords->entry(i, 0) != (complex_t)0) {
+			subRegVal = (i >> beginIndex) & (1 << endIndex - 1);
+			col = &gate.col(subRegVal);
+
+			// go through all options in output
+			for (int a = 0; a < 1 << (endIndex - beginIndex); ++a) {
+				newIndex = (i & ~(1 << endIndex - 1)) | (a << beginIndex) | (i & (1 << beginIndex - 1));
+				newCoords->entry(newIndex, 0) += coords->entry(i, 0) * col->entry(a, 0);
+			}
+
+		}
+	}
+
+	free(coords);
+	coords = newCoords;
 }
 
 int Quregister::getRegLength() {

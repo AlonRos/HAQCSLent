@@ -224,3 +224,14 @@ void Matrix2::print() {
 		cout << '\n';
 	}
 }
+
+Matrix2& createMatrixFromFunction(int* f, int length) {
+	Matrix2& Uf = *new Matrix2(length << 1, length << 1);
+
+	for (int i = 0; i < length; ++i) {
+		Uf.entry(2 * i, (i << 1) | f[i]) = 1;
+		Uf.entry(2 * i + 1, (i << 1) | (1 - f[i])) = 1;
+	}
+
+	return Uf;
+}
