@@ -7,6 +7,11 @@
 
 typedef std::complex<double> complex_t;
 
+struct gateIndexSize {
+	Matrix2& gate;
+	int beginIndex;
+	int endIndex;
+};
 
 class Quregister {
 private:
@@ -28,7 +33,7 @@ public:
 	// passing qubits from index i to index j (not including j)
 	void applyGates(Matrix2* gates, int i, int j);
 
-	void applyGates(vector<pair<Matrix2, int>> gatesIndices);
+	void applyGates(vector<gateIndexSize> gatesIndicesSizes);
 
 	// passing qubits from index i to index j (not including j) into the same gate
 	void applyGateOnQubits(Matrix2& gate, int i, int j);

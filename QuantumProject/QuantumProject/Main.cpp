@@ -19,7 +19,8 @@ using namespace std;
 
 int main() {
 	Quregister q(10, 0);
-	q.applyGateOnSubReg(Matrix2::kronecker(hadamard, hadamard), 1, 3);
+
+	q.applyGates({ { Matrix2::kronecker(hadamard, hadamard), 1, 3 }, { Matrix2::kronecker(hadamard, Matrix2::kronecker(hadamard, hadamard)), 1, 4 } });
 
 	q.getCoords()->print();
 }
