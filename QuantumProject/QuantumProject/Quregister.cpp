@@ -51,9 +51,7 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 
 	}
 
-	if (currentCoords == newCoords) {
-		free(currentCoords);
-	}
+	free(currentCoords);
 
 	coords = nextCoords;
 }
@@ -80,8 +78,6 @@ void Quregister::applyGates(vector<gateIndexSize> gatesIndicesSizes) {
 		beginIndex = gatesIndicesSizes[index].beginIndex;
 		endIndex = gatesIndicesSizes[index].endIndex;
 
-		subRegVal, newIndex;
-
 		mask = ~((1 << endIndex) - 1) | ((1 << beginIndex) - 1);
 
 		// wokring on | i >
@@ -102,9 +98,7 @@ void Quregister::applyGates(vector<gateIndexSize> gatesIndicesSizes) {
 
 	}
 
-	if (currentCoords == newCoords) {
-		free(currentCoords);
-	}
+	free(currentCoords);
 
 	coords = nextCoords;
 }
@@ -140,9 +134,7 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) 
 
 	}
 
-	if (currentCoords == newCoords) {
-		free(currentCoords);
-	}
+	free(currentCoords);
 
 	coords = nextCoords;
 }
