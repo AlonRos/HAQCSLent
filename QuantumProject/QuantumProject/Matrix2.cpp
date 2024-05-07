@@ -156,7 +156,7 @@ void Matrix2::kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 		for (int j = 0; j < A.n; ++j) {
 			for (int k = 0; k < B.m; ++k) {
 				for (int l = 0; l < B.n; ++l) {
-					saveIn.entry(i * B.m + k, j * B.n + l) = A.entry(i, j) * A.entry(k, l);
+					saveIn.entry(i * B.m + k, j * B.n + l) = A.entry(i, j) * B.entry(k, l);
 
 				}
 			}
