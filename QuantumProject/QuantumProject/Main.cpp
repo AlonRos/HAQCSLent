@@ -18,9 +18,14 @@
 using namespace std;
 
 int main() {
-	Quregister q(10, 0);
+	Quregister q(2, 0);
 
-	q.applyGates({ { Matrix2::kronecker(hadamard, hadamard), 1, 3 }, { Matrix2::kronecker(hadamard, Matrix2::kronecker(hadamard, hadamard)), 1, 4 } });
+	q.applyGateOnQubits(hadamard, 0, 2);
 
 	q.getCoords()->print();
+
+	cout << "\n" << q.regMeasureInSubSpaces({{Quregister(2, 0), Quregister(2, 2)}, {Quregister(2, 1), Quregister(2, 3)}}) << "\n";
+	q.getCoords()->print();
+
+
 }
