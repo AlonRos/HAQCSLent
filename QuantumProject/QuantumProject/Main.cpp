@@ -14,18 +14,15 @@
 
 #include "NegatingXFunction.h"
 #include "DeutschAlgorithm.h"
+#include "Grover'sAlgorithm.h"
 
 using namespace std;
 
 int main() {
-	Quregister q(2, 0);
+	int N = 3000;
 
-	q.applyGateOnQubits(hadamard, 0, 2);
+	int* f = new int[N];
+	f[60] = 1;
 
-	q.getCoords()->print();
-
-	cout << "\n" << q.regMeasureInSubSpaces({{Quregister(2, 0), Quregister(2, 2)}, {Quregister(2, 1), Quregister(2, 3)}}) << "\n";
-	q.getCoords()->print();
-
-
+	cout << grover(f, N);
 }
