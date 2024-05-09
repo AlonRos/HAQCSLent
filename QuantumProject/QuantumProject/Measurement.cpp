@@ -160,10 +160,9 @@ int measureComputational(Quregister& reg, int beginIndex, int endIndex) {
 		probs[a] = 0;
 
 		for (int indexInSpace = 0; indexInSpace < amountInSpace; ++indexInSpace) {
-			int indexInComputational = (indexInSpace & ~((1 << beginIndex) - 1)) | (a << beginIndex) | (indexInSpace & ((1 << beginIndex) - 1));
+			int indexInComputational = ((indexInSpace & ~((1 << beginIndex) - 1)) << endIndex) | (a << beginIndex) | (indexInSpace & ((1 << beginIndex) - 1));
 			probs[a] += complexNormSquared(coords->entry(indexInComputational, 0));
 		}
-
 	}
 
 	int chosenSpaceIndex = randomIndexProbs(probs, amountSpaces);
@@ -173,7 +172,7 @@ int measureComputational(Quregister& reg, int beginIndex, int endIndex) {
 	Matrix2* newCoords = new Matrix2(coordsLength, 1);
 
 	for (int indexInSpace = 0; indexInSpace < amountInSpace; ++indexInSpace) {
-		int indexInComputational = (indexInSpace & ~((1 << beginIndex) - 1)) | (chosenSpaceIndex << beginIndex) | (indexInSpace & ((1 << beginIndex) - 1));
+		int indexInComputational = ((indexInSpace & ~((1 << beginIndex) - 1)) << endIndex) | (chosenSpaceIndex << beginIndex) | (indexInSpace & ((1 << beginIndex) - 1));
 		newCoords->entry(indexInComputational, 0) = reg.getCoords()->entry(indexInComputational, 0) / normOfProjection;
 	}
 
