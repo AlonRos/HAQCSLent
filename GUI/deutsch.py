@@ -41,21 +41,23 @@ class DeutschFrame(customtkinter.CTkFrame):
                 self.table_states[y].append(False)
                 self.table[y].append(self.canvas.create_rectangle(x * CELL_WIDTH, y * CELL_HEIGHT, (x + 1) * CELL_WIDTH, (y + 1) * CELL_HEIGHT, fill=self.bg_color, outline="blue"))
 
+        self.label_res = customtkinter.CTkLabel(self, text="", font=("arial", 18))
+        self.label_res.grid(row=1, column=2, pady=10)
 
         self.run_button = customtkinter.CTkButton(self, text="Run", fg_color="blue", hover_color="red", command=self.run_button_callback)
-        self.run_button.grid(row=1, column=1, pady=30)
+        self.run_button.grid(row=2, column=1)
 
         self.home_button = customtkinter.CTkButton(self, text="Home", fg_color="blue", hover_color="red", command=lambda: self.parent.show_frame("home"))
-        self.home_button.grid(row=1, column=0, pady=30)
+        self.home_button.grid(row=2, column=0)
 
         self.create_balanced_button = customtkinter.CTkButton(self, text="Balanced", fg_color="blue", hover_color="red", command=self.create_balanced)
-        self.create_balanced_button.grid(row=1, column=2, pady=30)
+        self.create_balanced_button.grid(row=2, column=2)
 
         self.create_constant0_button = customtkinter.CTkButton(self, text="Constant 0", fg_color="blue", hover_color="red", command=lambda: self.create_constant(False))
-        self.create_constant0_button.grid(row=1, column=3, pady=30)
+        self.create_constant0_button.grid(row=2, column=3)
 
         self.create_constant1_button = customtkinter.CTkButton(self, text="Constant 1", fg_color="blue", hover_color="red", command=lambda: self.create_constant(True))
-        self.create_constant1_button.grid(row=1, column=4, pady=30)
+        self.create_constant1_button.grid(row=2, column=4)
 
         self.func_state = 0
         self.result_showed = False
@@ -96,11 +98,12 @@ class DeutschFrame(customtkinter.CTkFrame):
         with open(OUTPUT_FROM_ALG, "r") as f:
             f.readline()
             is_balanced = int(f.readline())
-            print(is_balanced)
+            self.label_res.configure(text="Balanced" if is_balanced else "Constant")
 
         self.parent.calculating = False
 
     def create_balanced(self):
+        self.label_res.configure(text="")
         self.create_constant(0)
 
         self.func_state = 2
@@ -117,6 +120,7 @@ class DeutschFrame(customtkinter.CTkFrame):
 
 
     def create_constant(self, n):
+        self.label_res.configure(text="")
         for y in range(TABLE_HEIGHT):
             for x in range(TABLE_WIDTH):
                 self.table_states[y][x] = n
