@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClInclude Include="Gates.h" />
     <ClInclude Include="CudaHeader.cuh" />
+    <ClInclude Include="Grover%27sAlgorithm.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix2.h" />
     <ClInclude Include="Measurement.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="DeutschAlgorithm.cpp" />
     <ClCompile Include="DeutschAlgorithm.h" />
     <ClCompile Include="Gates.cpp" />
+    <ClCompile Include="Grover%27sAlgorithm.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix2.cpp" />

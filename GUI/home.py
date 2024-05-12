@@ -14,3 +14,4 @@ class HomeFrame(customtkinter.CTkFrame):
 
         self.deutsch_button = customtkinter.CTkButton(self, text="Deutsch Algorithm", fg_color="blue", hover_color="red", command=lambda: self.parent.show_frame("deutsch"))
         self.deutsch_button.grid(row=1, column=0, pady=(0, 100))
+

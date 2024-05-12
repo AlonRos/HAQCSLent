@@ -1,6 +1,8 @@
 import random
+import time
 
 import customtkinter
+from main import INPUT_TO_ALG, OUTPUT_FROM_ALG
 
 CANVAS_WIDTH = 992  # pixels
 CANVAS_HEIGHT = 690  # pixels
@@ -59,16 +61,22 @@ class GroverFrame(customtkinter.CTkFrame):
         self.reset_button = customtkinter.CTkButton(self, text="Reset", fg_color="blue", hover_color="red", command=self.reset)
         self.reset_button.grid(row=1, column=3, pady=30)
 
+        self.amount_clicked = 0
         self.result_showed = False
         self.result = (0, 0)
 
 
     def reset(self):
+        if self.parent.calculating:
+            return
+
         self.clear_result()
         for y in range(TABLE_HEIGHT):
             for x in range(TABLE_WIDTH):
                 self.table_states[y][x] = False
                 self.canvas.itemconfig(self.table[y][x], fill=self.bg_color)
+
+        self.amount_clicked = 0
 
     def draw_result(self):
         table_y, table_x = self.result[1], self.result[0]
@@ -77,11 +85,50 @@ class GroverFrame(customtkinter.CTkFrame):
 
 
     def run_button_callback(self):
+        if self.parent.calculating:
+            return
+        self.parent.calculating = True
+
+        with open(OUTPUT_FROM_ALG, "r") as f:
+            if not f.readline() in ("result\n", "read\n"):
+                return
+
         self.clear_result()
 
-        self.result = (random.randrange(TABLE_WIDTH), random.randrange(TABLE_HEIGHT))
+        with open(INPUT_TO_ALG, "w") as f:
+            s = f"{self.amount_clicked}"
+            for y in range(TABLE_HEIGHT):
+                for x in range(TABLE_WIDTH):
+                    if self.table_states[y][x]:
+                        s += f"\n{x} {y}"
+
+            f.write(s)
+
+        with open(OUTPUT_FROM_ALG, "w") as f:
+            pass
+
+        self.parent.comm(1)
+
+        while True:
+            with open(OUTPUT_FROM_ALG, "r") as f:
+                if f.readline() in ("result\n", "read\n"):
+                    break
+
+            time.sleep(0.05)
+
+        with open(OUTPUT_FROM_ALG, "r") as f:
+            f.readline()
+            result_idx = int(f.readline())
+
+            if result_idx < TABLE_WIDTH * TABLE_HEIGHT:
+                self.result = (result_idx % TABLE_WIDTH, result_idx // TABLE_WIDTH)
+            else:
+                self.result = (random.randrange(TABLE_WIDTH), random.randrange(TABLE_HEIGHT))
+
 
         self.draw_result()
+
+        self.parent.calculating = False
 
 
 
@@ -97,6 +144,9 @@ class GroverFrame(customtkinter.CTkFrame):
         self.result_showed = False
 
     def mouse_click_callback(self, e):
+        if self.parent.calculating:
+            return
+
         if 0 <= e.x < CANVAS_WIDTH and 0 <= e.y < CANVAS_HEIGHT:
             table_x, table_y = pos_to_table(e.x, e.y)
             if self.result == (table_x, table_y) and self.result_showed:
@@ -104,8 +154,10 @@ class GroverFrame(customtkinter.CTkFrame):
 
             if self.table_states[table_y][table_x]:
                 self.table_states[table_y][table_x] = False
+                self.amount_clicked -= 1
                 self.canvas.itemconfig(self.table[table_y][table_x], fill=self.bg_color)
 
             else:
                 self.table_states[table_y][table_x] = True
+                self.amount_clicked += 1
                 self.canvas.itemconfig(self.table[table_y][table_x], fill="black")
