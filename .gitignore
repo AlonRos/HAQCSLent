@@ -400,3 +400,5 @@ FodyWeavers.xsd
 /QuantumProject/ClocProject.bat
 
 /GUI/.idea
+/cloc.exe
+/ClocProject.bat
