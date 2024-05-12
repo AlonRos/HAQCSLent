@@ -68,14 +68,11 @@ int main() {
 
 			for (int i = 0; i < amountOnes; ++i) {
 				input >> x >> y;
-				cout << y * groverTableW + x << " " << groverN << "\n";
 				
 				f[y * groverTableW + x] = 1;
 			}
 
 			output << "result\n" << grover(f, groverN);
-			cout << "done\n";
-
 		}
 
 		else if (t == 2) { // deutsch
@@ -86,6 +83,8 @@ int main() {
 		input.close();
 	}
 
+	output.close();
+	input.close();
 	delete[] f;
 
 }
