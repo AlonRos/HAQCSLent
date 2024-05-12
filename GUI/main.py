@@ -1,9 +1,11 @@
+import math
+
 import customtkinter
 from subprocess import Popen, PIPE
 
+import deutsch
 import grover
 import home
-import deutsch
 
 WINDOW_WIDTH = 992  # pixels
 WINDOW_HEIGHT = 800  # pixels
@@ -23,6 +25,11 @@ class App(customtkinter.CTk):
         self.calculating = False
 
         self.sub_process = Popen([PROGRAM_PATH], stdout=PIPE, stdin=PIPE, stderr=PIPE, text=True, shell=True)
+
+        self.comm(grover.TABLE_WIDTH)
+        self.comm(grover.TABLE_HEIGHT)
+        self.comm(deutsch.TABLE_WIDTH)
+        self.comm(int(round(math.log2(deutsch.TABLE_WIDTH * deutsch.TABLE_HEIGHT))))
 
         self.grover_frame = grover.GroverFrame(self)
         self.grover_frame.grid(row=0, column=0, sticky="nsew")

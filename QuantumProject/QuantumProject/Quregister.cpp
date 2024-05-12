@@ -51,7 +51,7 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 
 	}
 
-	free(currentCoords);
+	delete currentCoords;
 
 	coords = nextCoords;
 }
@@ -98,7 +98,7 @@ void Quregister::applyGates(vector<gateIndexSize> gatesIndicesSizes) {
 
 	}
 
-	free(currentCoords);
+	delete currentCoords;
 
 	coords = nextCoords;
 }
@@ -134,7 +134,7 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) 
 
 	}
 
-	free(currentCoords);
+	delete currentCoords;
 
 	coords = nextCoords;
 }
@@ -165,7 +165,7 @@ void Quregister::applyGateOnSubReg(Matrix2& gate, int beginIndex, int endIndex) 
 		}
 	}
 
-	free(coords);
+	delete coords;
 	coords = newCoords;
 }
 

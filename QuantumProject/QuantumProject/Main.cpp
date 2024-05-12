@@ -37,19 +37,27 @@ int main() {
 	int t;
 
 	ofstream output(OUTPUT_FROM_ALG);
-	ifstream input;
+	ifstream input(INPUT_TO_ALG);
 
+	int groverTableW, groverTableH, deutschTableW, deutschN;
+
+	cin >> groverTableW >> groverTableH >> deutschTableW >> deutschN;
 	output << "result\n";
-	output.close();
 
-	int groverTableW = 32, groverTableH = 30;
+	input.close();
+	output.close();
 
 	int amountOnes, x, y;
 
 	int groverN = groverTableW * groverTableH;
-	int* f = new int[groverN];
+	int* groverF = new int[groverN];
 
+	int deutschSize = 1 << deutschN;
+	int* deutschF = new int[deutschSize];
+
+	int c = 0;
 	while (true) {
+		++c;
 		cin >> t;
 
 		output.open(OUTPUT_FROM_ALG);
@@ -60,23 +68,37 @@ int main() {
 		}
 
 		else if (t == 1) { // grover
-			for (int i = 0; i < groverN; ++i) {
-				f[i] = 0;
-			}
+			std::fill(groverF, groverF + groverN, 0);
 
 			input >> amountOnes;
 
 			for (int i = 0; i < amountOnes; ++i) {
 				input >> x >> y;
 				
-				f[y * groverTableW + x] = 1;
+				groverF[y * groverTableW + x] = 1;
 			}
 
-			output << "result\n" << grover(f, groverN);
+			output << "result\n" << grover(groverF, groverN);
 		}
 
 		else if (t == 2) { // deutsch
-			
+			input >> x;
+
+			if (x == 0 || x == 1) {
+				std::fill(deutschF, deutschF + deutschSize, x);
+			}
+
+			else if (x == 2) {
+				std::fill(deutschF, deutschF + deutschSize, 0);
+
+				for (int i = 0; i < deutschSize / 2; ++i) {
+					input >> x >> y;
+
+					deutschF[y * deutschTableW + x] = 1;
+				}
+			}
+
+			output << "result\n" << isBalanced(deutschF, deutschN);
 		}
 
 		output.close();
@@ -85,6 +107,6 @@ int main() {
 
 	output.close();
 	input.close();
-	delete[] f;
+	delete[] groverF;
 
 }

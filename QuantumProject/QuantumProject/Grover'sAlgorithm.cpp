@@ -29,5 +29,7 @@ int grover(int* f, int N) {
 		q.applyGateOnQubits(hadamard, 0, q.getRegLength());
 	}
 
-	return q.regMeasureComputational();
+	int res = q.regMeasureComputational();
+	delete q.getCoords();
+	return res;
 }

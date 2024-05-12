@@ -107,7 +107,7 @@ class GroverFrame(customtkinter.CTkFrame):
         with open(OUTPUT_FROM_ALG, "w") as f:
             pass
 
-        self.parent.comm(1)
+        self.parent.comm(1)  # grover
 
         while True:
             with open(OUTPUT_FROM_ALG, "r") as f:

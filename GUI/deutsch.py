@@ -1,5 +1,8 @@
 import random
+import time
+
 import customtkinter
+from grover import INPUT_TO_ALG, OUTPUT_FROM_ALG
 
 CANVAS_WIDTH = 992  # pixels
 CANVAS_HEIGHT = 704  # pixels
@@ -54,16 +57,53 @@ class DeutschFrame(customtkinter.CTkFrame):
         self.create_constant1_button = customtkinter.CTkButton(self, text="Constant 1", fg_color="blue", hover_color="red", command=lambda: self.create_constant(True))
         self.create_constant1_button.grid(row=1, column=4, pady=30)
 
+        self.func_state = 0
         self.result_showed = False
         self.result = (0, 0)
 
 
     def run_button_callback(self):
-        pass
+        if self.parent.calculating:
+            return
+        self.parent.calculating = True
+
+        with open(OUTPUT_FROM_ALG, "r") as f:
+            if not f.readline() in ("result\n", "read\n"):
+                return
+
+        with open(INPUT_TO_ALG, "w") as f:
+            s = f"{self.func_state}"
+            if self.func_state == 2:
+                for y in range(TABLE_HEIGHT):
+                    for x in range(TABLE_WIDTH):
+                        if self.table_states[y][x]:
+                            s += f"\n{x} {y}"
+
+            f.write(s)
+
+        with open(OUTPUT_FROM_ALG, "w") as f:
+            pass
+
+        self.parent.comm(2)  # deutsch
+
+        while True:
+            with open(OUTPUT_FROM_ALG, "r") as f:
+                if f.readline() in ("result\n", "read\n"):
+                    break
+
+            time.sleep(0.05)
+
+        with open(OUTPUT_FROM_ALG, "r") as f:
+            f.readline()
+            is_balanced = int(f.readline())
+            print(is_balanced)
+
+        self.parent.calculating = False
 
     def create_balanced(self):
         self.create_constant(0)
 
+        self.func_state = 2
         lst = []
         for y in range(TABLE_HEIGHT):
             for x in range(TABLE_WIDTH):
@@ -73,9 +113,13 @@ class DeutschFrame(customtkinter.CTkFrame):
             x, y = random.choice(lst)
             self.table_states[y][x] = True
             self.canvas.itemconfig(self.table[y][x], fill="black")
+            lst.remove((x, y))
+
 
     def create_constant(self, n):
         for y in range(TABLE_HEIGHT):
             for x in range(TABLE_WIDTH):
                 self.table_states[y][x] = n
                 self.canvas.itemconfig(self.table[y][x], fill="black" if n else self.bg_color)
+
+        self.func_state = 1 if n else 0
