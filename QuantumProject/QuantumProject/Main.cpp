@@ -15,14 +15,12 @@
 #include "NegatingXFunction.h"
 #include "DeutschAlgorithm.h"
 #include "Grover'sAlgorithm.h"
+#include "Shor'sAlgorithm.h"
 
 using namespace std;
 
 int main() {
-	int N = 3000;
+	int N = 300;
 
-	int* f = new int[N];
-	f[60] = 1;
-
-	cout << grover(f, N);
+	factor(N);
 }
