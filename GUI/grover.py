@@ -2,10 +2,10 @@ import random
 
 import customtkinter
 
-CANVAS_WIDTH = 1000  # pixels
+CANVAS_WIDTH = 992  # pixels
 CANVAS_HEIGHT = 690  # pixels
 
-TABLE_WIDTH = 40  # cells
+TABLE_WIDTH = 32  # cells
 TABLE_HEIGHT = 30  # cells
 
 CELL_WIDTH = int(CANVAS_WIDTH / TABLE_WIDTH)  # pixels per cell
@@ -27,7 +27,7 @@ class GroverFrame(customtkinter.CTkFrame):
 
         self.canvas = customtkinter.CTkCanvas(self, width=CANVAS_WIDTH, height=CANVAS_HEIGHT)
         self.canvas.bind('<Button-1>', self.mouse_click_callback)
-        self.canvas.grid(row=0, column=0, columnspan=3, sticky="nsew")
+        self.canvas.grid(row=0, column=0, columnspan=4, sticky="nsew")
 
         for x in range(TABLE_WIDTH):
             self.canvas.create_line(x * CELL_WIDTH, 0, x * CELL_WIDTH, CANVAS_HEIGHT)
@@ -50,14 +50,25 @@ class GroverFrame(customtkinter.CTkFrame):
         self.run_button = customtkinter.CTkButton(self, text="Run", fg_color="blue", hover_color="red", command=self.run_button_callback)
         self.run_button.grid(row=1, column=1, pady=30)
 
-        self.home_button = customtkinter.CTkButton(self, text="Home", fg_color="blue", hover_color="red", command=self.home_button_callback)
+        self.home_button = customtkinter.CTkButton(self, text="Home", fg_color="blue", hover_color="red", command=lambda: self.parent.show_frame("home"))
         self.home_button.grid(row=1, column=0, pady=30)
 
         self.clear_result_button = customtkinter.CTkButton(self, text="Clear Result", fg_color="blue", hover_color="red", command=self.clear_result)
         self.clear_result_button.grid(row=1, column=2, pady=30)
 
+        self.reset_button = customtkinter.CTkButton(self, text="Reset", fg_color="blue", hover_color="red", command=self.reset)
+        self.reset_button.grid(row=1, column=3, pady=30)
+
         self.result_showed = False
         self.result = (0, 0)
+
+
+    def reset(self):
+        self.clear_result()
+        for y in range(TABLE_HEIGHT):
+            for x in range(TABLE_WIDTH):
+                self.table_states[y][x] = False
+                self.canvas.itemconfig(self.table[y][x], fill=self.bg_color)
 
     def draw_result(self):
         table_y, table_x = self.result[1], self.result[0]
@@ -72,6 +83,8 @@ class GroverFrame(customtkinter.CTkFrame):
 
         self.draw_result()
 
+
+
     def clear_result(self):
         table_y, table_x = self.result[1], self.result[0]
 
@@ -82,9 +95,6 @@ class GroverFrame(customtkinter.CTkFrame):
             self.canvas.itemconfig(self.table[table_y][table_x], fill="black")
 
         self.result_showed = False
-
-    def home_button_callback(self):
-        self.parent.show_frame("home")
 
     def mouse_click_callback(self, e):
         if 0 <= e.x < CANVAS_WIDTH and 0 <= e.y < CANVAS_HEIGHT:
