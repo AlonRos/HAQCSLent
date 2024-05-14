@@ -108,7 +108,7 @@ Matrix2& createMatrixFromFunction(int* f, int length);
 
 inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 #ifdef USEGPU
-	if ((long long)A.m * A.n * B.n > 729000) {
+	if ((long long)A.m * A.n * B.n > 729000 && B.n >= 4) {
 		return gpuMult(A, B);
 	}
 	return cpuMult(A, B);
@@ -120,7 +120,7 @@ inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
 
 inline void Matrix2::multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 #ifdef USEGPU
-	if ((long long)A.m * A.n * B.n > 729000) {
+	if ((long long)A.m * A.n * B.n > 729000 && B.n >= 4) {
 		return gpuMultIn(A, B, saveIn);
 	}
 	return cpuMultIn(A, B, saveIn);

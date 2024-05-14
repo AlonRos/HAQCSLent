@@ -34,6 +34,9 @@ using namespace std;
 
 
 int main() {
+#ifdef USEGPU
+	init();
+#endif
 	int t;
 
 	ofstream output(OUTPUT_FROM_ALG);
