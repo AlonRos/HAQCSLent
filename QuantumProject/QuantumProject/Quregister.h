@@ -33,17 +33,22 @@ public:
 	// passing qubits from index i to index j (not including j)
 	void applyGates(Matrix2* gates, int i, int j);
 
+	// apply gates on the register
 	void applyGates(vector<gateIndexSize> gatesIndicesSizes);
 
 	// passing qubits from index i to index j (not including j) into the same gate
 	void applyGateOnQubits(Matrix2& gate, int i, int j);
 
+	// apply gate on part of the register 
 	void applyGateOnSubReg(Matrix2& gate, int i, int j);
 
+	// measure the register with respect to an orthonormal basis
 	int regMeasure(vector<Quregister> basis);
 
+	// mesasure the register with respect to sub spaces
 	int regMeasureInSubSpaces(vector<vector<Quregister>> bases);
 
+	// measure the register in computational basis
 	int regMeasureComputational();
 
 	// measure the part between qubit i and qubit j (not including j)

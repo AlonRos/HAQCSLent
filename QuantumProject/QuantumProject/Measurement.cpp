@@ -4,7 +4,7 @@
 using namespace std;
 
 int randomIndexProbs(double* probs, int probsLength) {
-	double randNumber = rand01();
+	double randNumber = rand01(); // gives a random number in [0, 1)
 
 	for (int i = 0; i < probsLength; ++i) {
 		if (randNumber < probs[i]) {

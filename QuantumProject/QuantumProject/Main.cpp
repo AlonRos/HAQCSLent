@@ -58,10 +58,8 @@ int main() {
 	int deutschSize = 1 << deutschN;
 	int* deutschF = new int[deutschSize];
 
-	int c = 0;
 	while (true) {
-		++c;
-		cin >> t;
+		cin >> t; // which algorithm to run
 
 		output.open(OUTPUT_FROM_ALG);
 		input.open(INPUT_TO_ALG);
@@ -75,25 +73,28 @@ int main() {
 
 			input >> amountOnes;
 
+			// set the function to the wanted one
 			for (int i = 0; i < amountOnes; ++i) {
 				input >> x >> y;
 				
 				groverF[y * groverTableW + x] = 1;
 			}
 
-			output << "result\n" << grover(groverF, groverN);
+			output << "result\n" << grover(groverF, groverN);  // write the result to the file
 		}
 
 		else if (t == 2) { // deutsch
 			input >> x;
 
+			// set the function to the wanted one
 			if (x == 0 || x == 1) {
 				std::fill(deutschF, deutschF + deutschSize, x);
 			}
 
-			else if (x == 2) {
+			else if (x == 2) { // balanced
 				std::fill(deutschF, deutschF + deutschSize, 0);
 
+				// set the function to the wanted one
 				for (int i = 0; i < deutschSize / 2; ++i) {
 					input >> x >> y;
 
@@ -101,7 +102,7 @@ int main() {
 				}
 			}
 
-			output << "result\n" << isBalanced(deutschF, deutschN);
+			output << "result\n" << isBalanced(deutschF, deutschN); // write the result to the file
 		}
 
 		output.close();

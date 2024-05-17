@@ -42,37 +42,36 @@ class DeutschFrame(customtkinter.CTkFrame):
                 self.table[y].append(self.canvas.create_rectangle(x * CELL_WIDTH, y * CELL_HEIGHT, (x + 1) * CELL_WIDTH, (y + 1) * CELL_HEIGHT, fill=self.bg_color, outline="blue"))
 
         self.label_res = customtkinter.CTkLabel(self, text="", font=("arial", 18))
-        self.label_res.grid(row=1, column=2, pady=10)
+        self.label_res.grid(row=1, column=2, pady=10)  # positioning the label
 
         self.run_button = customtkinter.CTkButton(self, text="Run", fg_color="blue", hover_color="red", command=self.run_button_callback)
-        self.run_button.grid(row=2, column=1)
+        self.run_button.grid(row=2, column=1)  # positioning the button
 
         self.home_button = customtkinter.CTkButton(self, text="Home", fg_color="blue", hover_color="red", command=lambda: self.parent.show_frame("home"))
-        self.home_button.grid(row=2, column=0)
+        self.home_button.grid(row=2, column=0)  # positioning the button
 
         self.create_balanced_button = customtkinter.CTkButton(self, text="Balanced", fg_color="blue", hover_color="red", command=self.create_balanced)
-        self.create_balanced_button.grid(row=2, column=2)
+        self.create_balanced_button.grid(row=2, column=2)  # positioning the button
 
         self.create_constant0_button = customtkinter.CTkButton(self, text="Constant 0", fg_color="blue", hover_color="red", command=lambda: self.create_constant(False))
-        self.create_constant0_button.grid(row=2, column=3)
+        self.create_constant0_button.grid(row=2, column=3)  # positioning the button
 
         self.create_constant1_button = customtkinter.CTkButton(self, text="Constant 1", fg_color="blue", hover_color="red", command=lambda: self.create_constant(True))
-        self.create_constant1_button.grid(row=2, column=4)
+        self.create_constant1_button.grid(row=2, column=4)  # positioning the button
 
         self.func_state = 0
-        self.result_showed = False
-        self.result = (0, 0)
 
 
     def run_button_callback(self):
-        if self.parent.calculating:
+        if self.parent.calculating:  # check if already calculating
             return
         self.parent.calculating = True
 
-        with open(OUTPUT_FROM_ALG, "r") as f:
+        with open(OUTPUT_FROM_ALG, "r") as f:  # check the c++ finished and can perform another calculation
             if not f.readline() in ("result\n", "read\n"):
                 return
 
+        # write the input
         with open(INPUT_TO_ALG, "w") as f:
             s = f"{self.func_state}"
             if self.func_state == 2:
@@ -83,11 +82,13 @@ class DeutschFrame(customtkinter.CTkFrame):
 
             f.write(s)
 
+        # delete the content of the file
         with open(OUTPUT_FROM_ALG, "w") as f:
             pass
 
-        self.parent.comm(2)  # deutsch
+        self.parent.comm(2)  # tell the c++ to run deutsch's algorithm
 
+        # wait until the result is ready
         while True:
             with open(OUTPUT_FROM_ALG, "r") as f:
                 if f.readline() in ("result\n", "read\n"):
@@ -117,6 +118,7 @@ class DeutschFrame(customtkinter.CTkFrame):
             self.table_states[y][x] = True
             self.canvas.itemconfig(self.table[y][x], fill="black")
             lst.remove((x, y))
+
 
 
     def create_constant(self, n):

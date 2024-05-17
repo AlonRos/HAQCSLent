@@ -26,6 +26,7 @@ class App(customtkinter.CTk):
 
         self.sub_process = Popen([PROGRAM_PATH], stdout=PIPE, stdin=PIPE, stderr=PIPE, text=True, shell=True)
 
+        # tell the subprocess the sizes of the tables
         self.comm(grover.TABLE_WIDTH)
         self.comm(grover.TABLE_HEIGHT)
         self.comm(deutsch.TABLE_WIDTH)

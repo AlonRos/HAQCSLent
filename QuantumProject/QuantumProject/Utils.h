@@ -13,6 +13,7 @@ void copyArr(void* src, void* dest, int length, int sizeOfElement);
 
 double complexNormSquared(complex_t z);
 
+// random number between 0 and 1
 double rand01();
 
 // Gives a random integer number in [0, bound)
