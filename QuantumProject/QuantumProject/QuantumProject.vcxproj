@@ -18,6 +18,34 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CUDA\CudaHeader.cuh" />
+    <ClInclude Include="Include\DeutschAlgorithm.h" />
+    <ClInclude Include="Include\Gates.h" />
+    <ClInclude Include="Include\Grover%27sAlgorithm.h" />
+    <ClInclude Include="Include\Log.h" />
+    <ClInclude Include="Include\Matrix2.h" />
+    <ClInclude Include="Include\Measurement.h" />
+    <ClInclude Include="Include\NegatingXFunction.h" />
+    <ClInclude Include="Include\Quregister.h" />
+    <ClInclude Include="Include\Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Sources\DeutschAlgorithm.cpp" />
+    <ClCompile Include="Sources\Gates.cpp" />
+    <ClCompile Include="Sources\Grover%27sAlgorithm.cpp" />
+    <ClCompile Include="Sources\Log.cpp" />
+    <ClCompile Include="Sources\Main.cpp" />
+    <ClCompile Include="Sources\Matrix2.cpp" />
+    <ClCompile Include="Sources\Measurement.cpp" />
+    <ClCompile Include="Sources\NegatingXFunction.cpp" />
+    <ClCompile Include="Sources\Quregister.cpp" />
+    <ClCompile Include="Sources\Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="CUDA\cudaAdd.cu" />
+    <CudaCompile Include="CUDA\CudaMult.cu" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
@@ -40,13 +68,13 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -138,34 +166,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Gates.h" />
-    <ClInclude Include="CudaHeader.cuh" />
-    <ClInclude Include="Grover%27sAlgorithm.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="Matrix2.h" />
-    <ClInclude Include="Measurement.h" />
-    <ClInclude Include="NegatingXFunction.h" />
-    <ClInclude Include="Quregister.h" />
-    <ClInclude Include="Utils.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="DeutschAlgorithm.cpp" />
-    <ClCompile Include="DeutschAlgorithm.h" />
-    <ClCompile Include="Gates.cpp" />
-    <ClCompile Include="Grover%27sAlgorithm.cpp" />
-    <ClCompile Include="Log.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Matrix2.cpp" />
-    <ClCompile Include="Measurement.cpp" />
-    <ClCompile Include="NegatingXFunction.cpp" />
-    <ClCompile Include="Quregister.cpp" />
-    <ClCompile Include="Utils.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="cudaAdd.cu" />
-    <CudaCompile Include="CudaMult.cu" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
     <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 12.4.targets" />
