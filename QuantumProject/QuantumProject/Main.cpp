@@ -37,80 +37,38 @@ int main() {
 #ifdef USEGPU
 	init();
 #endif
-	int t;
 
-	ofstream output(OUTPUT_FROM_ALG);
-	ifstream input(INPUT_TO_ALG);
+	int c = 10;
 
-	int groverTableW, groverTableH, deutschTableW, deutschN;
+	int duration = 0;
+	
+	int N = 1024;
 
-	cin >> groverTableW >> groverTableH >> deutschTableW >> deutschN;
-	output << "result\n";
+	for (int i = 0; i < c; ++i) {
+		Matrix2& m1 = Matrix2::randomMatrix(N, N, 25);
+		//m1.print();
+		//cout << "\n";
 
-	input.close();
-	output.close();
+		Matrix2& m2 = Matrix2::randomMatrix(N, 8, 25);
+		//m2.print();
+		//cout << "\n";
 
-	int amountOnes, x, y;
 
-	int groverN = groverTableW * groverTableH;
-	int* groverF = new int[groverN];
+		auto start = chrono::high_resolution_clock::now();
 
-	int deutschSize = 1 << deutschN;
-	int* deutschF = new int[deutschSize];
+		Matrix2& m = Matrix2::mult(m1, m2);
 
-	while (true) {
-		cin >> t; // which algorithm to run
+		auto stop = chrono::high_resolution_clock::now();
+		//m.print();
+		//cout << "\n";
 
-		output.open(OUTPUT_FROM_ALG);
-		input.open(INPUT_TO_ALG);
+		duration += duration_cast<chrono::milliseconds>(stop - start).count();
 
-		if (t == 0) { // terminate
-			break;
-		}
-
-		else if (t == 1) { // grover
-			std::fill(groverF, groverF + groverN, 0);
-
-			input >> amountOnes;
-
-			// set the function to the wanted one
-			for (int i = 0; i < amountOnes; ++i) {
-				input >> x >> y;
-				
-				groverF[y * groverTableW + x] = 1;
-			}
-
-			output << "result\n" << grover(groverF, groverN);  // write the result to the file
-		}
-
-		else if (t == 2) { // deutsch
-			input >> x;
-
-			// set the function to the wanted one
-			if (x == 0 || x == 1) {
-				std::fill(deutschF, deutschF + deutschSize, x);
-			}
-
-			else if (x == 2) { // balanced
-				std::fill(deutschF, deutschF + deutschSize, 0);
-
-				// set the function to the wanted one
-				for (int i = 0; i < deutschSize / 2; ++i) {
-					input >> x >> y;
-
-					deutschF[y * deutschTableW + x] = 1;
-				}
-			}
-
-			output << "result\n" << isBalanced(deutschF, deutschN); // write the result to the file
-		}
-
-		output.close();
-		input.close();
+		delete& m1;
+		delete& m2;
+		delete& m;
 	}
 
-	output.close();
-	input.close();
-	delete[] groverF;
+	cout << (double)duration / c;
 
 }
