@@ -137,6 +137,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <CudaCompile>
+      <CodeGeneration>compute_75,sm_75</CodeGeneration>
+    </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Gates.h" />

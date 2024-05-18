@@ -32,43 +32,57 @@ using namespace std;
 
 #endif
 
+int getAmountTime(int m1, int n1, int m2, int n2, int c, bool gpu) {
+	int duration = 0;
+
+	for (int i = 0; i < c; ++i) {
+		Matrix2& mat1 = Matrix2::randomMatrix(m1, n1, 25);
+
+		Matrix2& mat2 = Matrix2::randomMatrix(m2, n2, 25);
+
+		auto start = chrono::high_resolution_clock::now();
+
+		Matrix2& mat3 = Matrix2::mult(mat1, mat2, gpu);
+
+		auto stop = chrono::high_resolution_clock::now();
+
+		duration += duration_cast<chrono::milliseconds>(stop - start).count();
+
+		delete& mat1;
+		delete& mat2;
+		delete& mat3;
+	}
+
+	return duration;
+}
 
 int main() {
 #ifdef USEGPU
 	init();
 #endif
 
-	int c = 10;
-
-	int duration = 0;
-	
-	int N = 1024;
-
-	for (int i = 0; i < c; ++i) {
-		Matrix2& m1 = Matrix2::randomMatrix(N, N, 25);
-		//m1.print();
-		//cout << "\n";
-
-		Matrix2& m2 = Matrix2::randomMatrix(N, 8, 25);
-		//m2.print();
-		//cout << "\n";
+	int c = 2;
+	int durationCPU, durationGPU;
 
 
-		auto start = chrono::high_resolution_clock::now();
+	durationCPU = getAmountTime(1024, 1024, 1024, 8, c, false);
+	durationGPU = getAmountTime(1024, 1024, 1024, 8, c, true);
+	cout << "In average, the CPU calculated (1024 x 1024) * (1024 x 8) in " << (double)durationCPU / c << " milliseconds\n";
+	cout << "In average, the GPU calculated (1024 x 1024) * (1024 x 8) in " << (double)durationGPU / c << " milliseconds\n\n";
 
-		Matrix2& m = Matrix2::mult(m1, m2);
 
-		auto stop = chrono::high_resolution_clock::now();
-		//m.print();
-		//cout << "\n";
+	durationGPU = getAmountTime(1024, 1024, 1024, 4, c, true);
+	durationCPU = getAmountTime(1024, 1024, 1024, 4, c, false);
+	cout << "In average, the CPU calculated (1024 x 1024) * (1024 x 4) in " << (double)durationCPU / c << " milliseconds\n";
+	cout << "In average, the GPU calculated (1024 x 1024) * (1024 x 4) in " << (double)durationGPU / c << " milliseconds\n\n";
 
-		duration += duration_cast<chrono::milliseconds>(stop - start).count();
+	durationGPU = getAmountTime(1024, 1024, 1024, 1024, c, true);
+	durationCPU = getAmountTime(1024, 1024, 1024, 1024, c, false);
+	cout << "In average, the CPU calculated (1024 x 1024) * (1024 x 1024) in " << (double)durationCPU / c << " milliseconds\n";
+	cout << "In average, the GPU calculated (1024 x 1024) * (1024 x 1024) in " << (double)durationGPU / c << " milliseconds\n\n";
 
-		delete& m1;
-		delete& m2;
-		delete& m;
-	}
 
-	cout << (double)duration / c;
+
+
 
 }
