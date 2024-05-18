@@ -97,6 +97,7 @@ Matrix2& Matrix2::conjTranspose() {
 double Matrix2::normSquared() {
 	double res = 0;
 
+	// loop through all the elements and add the absolute value squared
 	if (rowwise) {
 		for (int i = 0; i < m; ++i) {
 			for (int j = 0; j < n; ++j) {
@@ -136,14 +137,16 @@ void Matrix2::cpuMultIn(Matrix2& A, Matrix2& B, Matrix2& saveIn) {
 
 	complex_t* res = new complex_t[A.m * B.n];
 
+	// multiplying the i'th of A with the j's row of B
 	for (int i = 0; i < A.m; ++i) {
-		for (int k = 0; k < A.n; ++k) {
+		for (int k = 0; k < A.n; ++k) { // the index in the row/col
 			for (int j = 0; j < B.n; ++j) {
 				res[B.n * i + j] += A.entry(i, k) * B.entry(k, j);
 			}
 		}
 	}
 
+	// save the result
 	for (int i = 0; i < A.m; ++i) {
 		for (int j = 0; j < B.n; ++j) {
 			saveIn.entry(i, j) = res[B.n * i + j];
@@ -169,6 +172,7 @@ Matrix2& Matrix2::operator*(complex_t scalar) {
 
 	int newJump;
 
+	// loop through all the elements and multiply them by scalar
 	if (rowwise) {
 		for (int i = 0; i < m; ++i) {
 			for (int j = 0; j < n; ++j) {
@@ -223,15 +227,4 @@ void Matrix2::print() {
 		}
 		cout << '\n';
 	}
-}
-
-Matrix2& createMatrixFromFunction(int* f, int length) {
-	Matrix2& Uf = *new Matrix2(length << 1, length << 1);
-
-	for (int i = 0; i < length; ++i) {
-		Uf.entry(2 * i, (i << 1) | f[i]) = 1;
-		Uf.entry(2 * i + 1, (i << 1) | (1 - f[i])) = 1;
-	}
-
-	return Uf;
 }

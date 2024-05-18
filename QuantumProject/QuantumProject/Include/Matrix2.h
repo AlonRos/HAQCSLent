@@ -121,8 +121,6 @@ inline Matrix2& Matrix2::operator+(Matrix2& other) {
 	return Matrix2::add(*this, other);
 }
 
-Matrix2& createMatrixFromFunction(int* f, int length);
-
 // multiply
 
 inline Matrix2& Matrix2::mult(Matrix2& A, Matrix2& B) {
