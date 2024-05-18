@@ -12,7 +12,7 @@ WINDOW_HEIGHT = 800  # pixels
 
 INPUT_TO_ALG = ".\\input_to_alg.txt"
 OUTPUT_FROM_ALG = ".\\output_from_alg.txt"
-PROGRAM_PATH = "..\\QuantumProject\\x64\\Release\\QuantumProject.exe"
+PROGRAM_PATH = "..\\QuantumProject\\QuantumProject\\Executable\\QuantumProject.exe"
 
 class App(customtkinter.CTk):
     def __init__(self):
