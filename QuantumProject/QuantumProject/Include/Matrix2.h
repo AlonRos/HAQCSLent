@@ -28,59 +28,78 @@ public:
 	int m, n;
 	complex_t* elements;
 
-	// Zeros elements
+	// zeros elements
 	Matrix2(int m, int n);
 
-	// Doesn't zero elements
+	// doesn't zero elements
 	Matrix2(int m, int n, bool rowwise);
 
-	// Doesn't copy elements themselves
+	// doesn't copy elements themselves
 	Matrix2(int m, int n, complex_t* elements, bool rowwise, int jump);
 
-	// Copies elements themselves, assuming arr is a m * n array (rowwise)
+	// copies elements themselves, assuming arr is a m * n array (rowwise)
 	Matrix2(int m, int n, complex_t* arr);
 
 	~Matrix2();
 
+	// multiply matrices and return the result
 	inline static Matrix2& mult(Matrix2& A, Matrix2& B);
 
+	// multiply matrices and save the result in saveIn
 	inline static void multIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
+	// add matrices and return the result
 	inline static Matrix2& add(Matrix2& A, Matrix2& B);
 
+	// add matrices and save the result in saveIn
 	inline static void addIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
+	// kronecker-multiply matrices and return the result
 	inline static Matrix2& kronecker(Matrix2& A, Matrix2& B);
 
+	// kronecker-multiply matrices and save the result in saveIn
 	static void kroneckerIn(Matrix2& A, Matrix2& B, Matrix2& saveIn);
 
+	// multiply with other and return the result
 	Matrix2& operator*(Matrix2& other);
 
+	// add other and return the result
 	Matrix2& operator+(Matrix2& other);
 
+	// multiply by scalar and return the result
 	Matrix2& operator*(complex_t scalar);
 
+	// get the (rowIndex, colIndex) entry of the matrix
 	complex_t& entry(int rowIndex, int colIndex);
 
+	// zero the matrix elemenets
 	void zero();
 
-	// Return a matrix containing the rows i to j (including i, not including j). The elements are in the same address as this's elements.
+	// return a matrix containing the rows i to j (including i, not including j). The elements are in the same address as this' elements.
 	Matrix2& rows(int i, int j);
 
+	// return the rowIndex row
 	inline Matrix2& row(int rowIndex);
 
+	// return a matrix containing the columns i to j (including i, not including j). The elements are in the same address as this' elements.
 	Matrix2& cols(int i, int j);
 
+	// return the colIndex column
 	inline Matrix2& col(int colIndex);
 
+	// return the transpose of the matrix. The elements are in the same address as this' elements.
 	Matrix2& transpose();
 
+	// return the conjugate transpose of the matrix
 	Matrix2& conjTranspose();
 
+	// get the norm of the matrix squared
 	double normSquared();
 
+	// print the matrix
 	void print();
 
+	// get a random matrix with dimension m x n with elements a + ib, where 0 <= a, b < bound
 	static Matrix2& randomMatrix(int m, int n, int bound);
 
 

@@ -5,7 +5,7 @@
 #include <math.h>
 
 Quregister::Quregister(int length, int num) : length(length) {
-	coordsLength = 1 << length;
+	coordsLength = 1 << length; // 2^length
 	coords = new Matrix2(coordsLength, 1);
 	coords->entry(num, 0) = 1;
 }
@@ -30,9 +30,9 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 	for (int index = beginIndex; index < endIndex; ++index) {
 		currentCoords = coordsArr[(index - beginIndex) % 2];
 		nextCoords = coordsArr[(index - beginIndex + 1) % 2];
-		nextCoords->zero();
+		nextCoords->zero(); // zero the coords we are going to write in
 
-		Matrix2& gate = gates[index - beginIndex];
+		Matrix2& gate = gates[index - beginIndex]; // the current gate
 
 		Matrix2* cols[2] = { &gate.col(0), &gate.col(1) };
 		Matrix2* col;
@@ -40,10 +40,11 @@ void Quregister::applyGates(Matrix2* gates, int beginIndex, int endIndex) {
 		// apply gate on one qubit
 		for (int i = 0; i < coordsLength; ++i) { 
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
-				int qb = (i >> index) & 1;
+				int qb = (i >> index) & 1; // the value of the qubit
 
-				col = cols[qb];
+				col = cols[qb]; // applying the gate on the qubit
 
+				// writing the result
 				nextCoords->entry(i, 0) += currentCoords->entry(i, 0) * col->entry(qb, 0);
 				nextCoords->entry(i ^ (1 << index), 0) += currentCoords->entry(i, 0) * col->entry(1 - qb, 0);
 			}
@@ -83,11 +84,11 @@ void Quregister::applyGates(vector<gateIndexSize> gatesIndicesSizes) {
 		// wokring on | i >
 		for (int i = 0; i < coordsLength; ++i) {
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
-				subRegVal = (i >> beginIndex) & ((1 << endIndex) - 1);
+				subRegVal = (i >> beginIndex) & ((1 << endIndex) - 1); // the value of the current sub register
 
-				col = &gate->col(subRegVal);
+				col = &gate->col(subRegVal); // applying the gate on the sub register
 
-				// go through all options in output
+				// go through all options in output and right the result
 				for (int a = 0; a < 1 << (endIndex - beginIndex); ++a) {
 					newIndex = (i & mask) | (a << beginIndex);
 					nextCoords->entry(newIndex, 0) += currentCoords->entry(i, 0) * col->entry(a, 0);
@@ -123,10 +124,11 @@ void Quregister::applyGateOnQubits(Matrix2& gate, int beginIndex, int endIndex) 
 		// apply gate on one qubit (wokring on | i >)
 		for (int i = 0; i < coordsLength; ++i) {
 			if (currentCoords->entry(i, 0) != (complex_t)0) {
-				int qb = (i >> index) & 1;
+				int qb = (i >> index) & 1; // the value of the qubit
 
-				col = cols[qb];
+				col = cols[qb]; // applying the gate on the qubit
 
+				// writing the result
 				nextCoords->entry(i, 0) += currentCoords->entry(i, 0) * col->entry(qb, 0);
 				nextCoords->entry(i ^ (1 << index), 0) += currentCoords->entry(i, 0) * col->entry(1 - qb, 0);
 			}
@@ -152,11 +154,11 @@ void Quregister::applyGateOnSubReg(Matrix2& gate, int beginIndex, int endIndex) 
 	// wokring on | i >
 	for (int i = 0; i < coordsLength; ++i) {
 		if (coords->entry(i, 0) != (complex_t)0) {
-			subRegVal = (i >> beginIndex) & ((1 << endIndex) - 1);
+			subRegVal = (i >> beginIndex) & ((1 << endIndex) - 1); // the value of the current sub register
 
-			col = &gate.col(subRegVal);
+			col = &gate.col(subRegVal); // applying the gate on the sub register
 
-			// go through all options in output
+			// go through all options in output and right the result
 			for (int a = 0; a < 1 << (endIndex - beginIndex); ++a) {
 				newIndex = (i & mask) | (a << beginIndex);
 				newCoords->entry(newIndex, 0) += coords->entry(i, 0) * col->entry(a, 0);

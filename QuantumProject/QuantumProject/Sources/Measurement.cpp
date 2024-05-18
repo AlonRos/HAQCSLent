@@ -42,23 +42,23 @@ int measure(Quregister& reg, vector<Quregister> basis) {
 
 	complex_t* projs = new complex_t[coordsLength];
 
-	Matrix2* projectionNorm = new Matrix2(1, 1, true), *vStar;
+	Matrix2* innerProduct = new Matrix2(1, 1, true), *vStar;
 
 	for (int i = 0; i < coordsLength; ++i) {
 		vStar = &basis[i].getCoords()->conjTranspose();
-		Matrix2::multIn(*vStar, *reg.getCoords(), *projectionNorm);
+		Matrix2::multIn(*vStar, *reg.getCoords(), *innerProduct); // calculate the inner product
 
 		delete vStar;
 
-		projs[i] = projectionNorm->entry(0, 0);
+		projs[i] = innerProduct->entry(0, 0); // the inner product (the projection)
 	}
 
-	delete projectionNorm;
+	delete innerProduct;
 
-	int chosenIndex = randomIndexProjs(projs, coordsLength);
+	int chosenIndex = randomIndexProjs(projs, coordsLength); // choose index according to projections
 
+	// write the result and normalize
 	Matrix2* chosenVector = basis[chosenIndex].getCoords();
-
 	delete reg.getCoords();
 	reg.getCoords() = &((*chosenVector) * (projs[chosenIndex] / abs(projs[chosenIndex])));
 
@@ -76,7 +76,7 @@ int measureInSubSpaces(Quregister& reg, vector<vector<Quregister>> bases) {
 	int currDim;
 	vector<Quregister> currBasis;
 
-	Matrix2* projectionNorm = new Matrix2(1, 1, true), * vStar;
+	Matrix2* innerProduct = new Matrix2(1, 1, true), * vStar;
 
 	for (int a = 0; a < amountSpaces; ++a) { // loop through all the spaces
 		currBasis = bases[a];
@@ -86,15 +86,15 @@ int measureInSubSpaces(Quregister& reg, vector<vector<Quregister>> bases) {
 
 		for (int i = 0; i < currDim; ++i) { // loop through all the basis vectors of this sub space
 			vStar = &currBasis[i].getCoords()->conjTranspose();
-			Matrix2::multIn(*vStar, *reg.getCoords(), *projectionNorm); // the inner product
+			Matrix2::multIn(*vStar, *reg.getCoords(), *innerProduct); // the inner product
 			delete vStar;
 
-			probs[a] += complexNormSquared(projectionNorm->entry(0, 0)); // |proj|^2
+			probs[a] += complexNormSquared(innerProduct->entry(0, 0)); // |proj|^2
 
 		}
 	}
 
-	delete projectionNorm;
+	delete innerProduct;
 
 
 	int chosenSpaceIndex = randomIndexProbs(probs, amountSpaces);
@@ -134,12 +134,13 @@ int measureComputational(Quregister& reg) {
 	Matrix2* coords = reg.getCoords();
 	double* probs = new double[coordsLength];
 	for (int i = 0; i < coordsLength; ++i) {
-		probs[i] = complexNormSquared(coords->entry(i, 0));
+		probs[i] = complexNormSquared(coords->entry(i, 0)); // calculate the probability to get | i >
 	}
 
-	int chosenIndex = randomIndexProbs(probs, coordsLength);
+	int chosenIndex = randomIndexProbs(probs, coordsLength); // choose a value
 	delete[] probs;
 
+	// write the result and normalize
 	complex_t chosenIndexEntryNormalized = reg.getCoords()->entry(chosenIndex, 0) / abs(reg.getCoords()->entry(chosenIndex, 0));
 	delete reg.getCoords();
 	reg.getCoords() = new Matrix2(coordsLength, 1);
